@@ -23,6 +23,14 @@ class CustomUserAdmin(UserAdmin):
         ('Thông tin bổ sung', {'fields': ('phone_number', 'address', 'role')}),
     )
 
+    def save_model(self, request, obj, form, change):
+        """Đảm bảo `is_staff` được cập nhật đúng khi admin thay đổi role"""
+        if obj.role in ['staff', 'veterinarian', 'admin']:
+            obj.is_staff = True
+        else:
+            obj.is_staff = False
+        super().save_model(request, obj, form, change)
+
 #  **Đăng ký CustomUserAdmin vào Django Admin**
 admin.site.register(CustomUser, CustomUserAdmin)
 
