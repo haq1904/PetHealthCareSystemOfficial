@@ -69,7 +69,7 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=15, unique=True, null=True, blank=True)
-    address = models.TextField(blank=True, null=True)
+    address = models.TextField(max_length=100,blank=True, null=True)
     role = models.CharField(
         max_length=20,
         choices=UserRole.choices,
@@ -85,8 +85,8 @@ class CustomUser(AbstractUser):
 class Staff(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name_staff = models.CharField(max_length=100)
-    phone_number_staff = models.CharField(max_length=15)
-    email_staff = models.EmailField()
+    phone_number_staff = models.CharField(max_length=15,null=True,blank=True)
+    email_staff = models.EmailField(null=True,blank=True)
 
     def __str__(self):
         return self.name_staff
@@ -94,9 +94,9 @@ class Staff(models.Model):
 class Customer(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name_customer = models.CharField(max_length=100)
-    phone_number_customer = models.CharField(max_length=15)
-    address = models.TextField()
-    email_customer = models.EmailField()
+    phone_number_customer = models.CharField(max_length=15,null=True,blank=True)
+    address = models.TextField(null=True,blank=True)
+    email_customer = models.EmailField(null=True,blank=True)
 
     def __str__(self):
         return self.name_customer
@@ -104,9 +104,9 @@ class Customer(models.Model):
 class Veterinarian(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name_veterinarian = models.CharField(max_length=100)
-    phone_number_veterinarian = models.CharField(max_length=15)
-    specialization = models.CharField(max_length=100)
-    email_vet = models.EmailField()
+    phone_number_veterinarian = models.CharField(max_length=15,null=True,blank=True)
+    specialization = models.CharField(max_length=100,null=True,blank=True)
+    email_vet = models.EmailField(null=True,blank=True)
 
     def __str__(self):
         return self.name_veterinarian
@@ -124,20 +124,20 @@ class Pet(models.Model):
 
 class Examine(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
-    diagnosis = models.TextField()
-    symptom = models.TextField()
-    start_date = models.DateField()
+    diagnosis = models.TextField(null=True,blank=True)
+    symptom = models.TextField(null=True,blank=True)
+    start_date = models.DateField(null=True,blank=True)
     end_date = models.DateField(null=True, blank=True)
-    treatment_process = models.TextField()
-    result = models.TextField()
+    treatment_process = models.TextField(null=True,blank=True)
+    result = models.TextField(null=True,blank=True)
 
     def __str__(self):
         return f"Examine for Pet {self.pet.name_pet}"
 
 class MedicalHistory(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
-    date = models.DateField()
-    disease = models.CharField(max_length=255)
+    date = models.DateField(null=True,blank=True)
+    disease = models.CharField(max_length=255,null=True,blank=True)
 
     def __str__(self):
         return f"Medical History for Pet {self.pet.name_pet} on {self.date}"
@@ -145,7 +145,7 @@ class MedicalHistory(models.Model):
 
 class Gender(models.Model):
     pet = models.OneToOneField(Pet, on_delete=models.CASCADE, related_name="gender")
-    is_male = models.BooleanField()
+    is_male = models.BooleanField(null=True,blank=True)
 
     def __str__(self):
         return f"Gender of {self.pet.name_pet}: {'Male' if self.is_male else 'Female'}"
@@ -153,9 +153,9 @@ class Gender(models.Model):
 
 class VaccinationHistory(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE, related_name="vaccination_histories")
-    date = models.DateField()
-    vaccine_type = models.CharField(max_length=255)
-    dosage = models.CharField(max_length=50)
+    date = models.DateField(null=True,blank=True)
+    vaccine_type = models.CharField(max_length=255,null=True,blank=True)
+    dosage = models.CharField(max_length=50,null=True,blank=True)
     note = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -163,7 +163,7 @@ class VaccinationHistory(models.Model):
     
 class Cage(models.Model):
     cage = models.AutoField(primary_key=True)
-    capacity = models.IntegerField()
+    capacity = models.IntegerField(null=True,blank=True)
 
     def __str__(self):
         return f"Cage {self.id} with Capacity {self.capacity}"
@@ -171,9 +171,9 @@ class Cage(models.Model):
 class Hospitalization(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
     cage = models.ForeignKey(Cage, on_delete=models.CASCADE)
-    start_date = models.DateField()
+    start_date = models.DateField(null=True,blank=True)
     end_date = models.DateField(null=True, blank=True)
-    symptom = models.TextField()
+    symptom = models.TextField(null=True,blank=True)
 
     def __str__(self):
         return f"Hospitalization for Pet {self.pet.name_pet} in Cage {self.cage.id}"
@@ -243,7 +243,7 @@ class Review(models.Model):
     form_customer = models.TextField(null=True,blank=True)
     form_veterinarian = models.TextField(null=True,blank=True)
     time = models.DateTimeField(auto_now_add=True)
-    score = models.IntegerField()
+    score = models.IntegerField(null=True,blank=True)
 
     def __str__(self):
         return f"Review for Booking {self.booking.id}"
