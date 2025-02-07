@@ -201,6 +201,7 @@ class Booking(models.Model):
     cancel_date = models.DateTimeField(null=True, blank=True)
     refund_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     booking_time = models.DateTimeField(auto_now_add=True)
+    store_pet = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Booking {self.id}"

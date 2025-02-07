@@ -9,7 +9,8 @@ from .form import *
 # Create your views here.
 def register(request):
     if(request.user.is_authenticated):
-        return redirect('home')
+        logout(request)
+        redirect('login')
     form = CreateUserForm()
     if request.method == "POST" :
         form = CreateUserForm(request.POST) 
@@ -23,21 +24,22 @@ def register(request):
 
 def loginPage(request):
     if(request.user.is_authenticated):
-        return redirect('home')
+        if(request.user.role == "user"):
+            return redirect('home_customer')
     if(request.method== "POST"):
         username=request.POST.get('username')
         password=request.POST.get('password')
         user=authenticate(request,username=username,password=password)
         if(user is not None):
             login(request,user)
-            return redirect('home')
+            return redirect('home_customer')
         else:
             messages.info(request,"User name or Password is not correct")
-    return render(request,'app/login.html')
+    return render(request,'app/cutomer/login.html')
 
 def logoutPage(request):
     logout(request)
     return redirect('login')
 
-def home(request):
-    return render(request,'app/home.html')
+def home_customer(request):
+    return render(request,'app/home_customer.html')
