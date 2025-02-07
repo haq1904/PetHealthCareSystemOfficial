@@ -118,6 +118,7 @@ class Pet(models.Model):
     weight = models.DecimalField(max_digits=5, decimal_places=2)  
     pet_status = models.CharField(max_length=50, blank=True, null=True) 
     pet_type = models.CharField(max_length=50, blank=True, null=True)  
+    is_male = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.name_pet} ({self.species})"
@@ -142,13 +143,6 @@ class MedicalHistory(models.Model):
     def __str__(self):
         return f"Medical History for Pet {self.pet.name_pet} on {self.date}"
 
-
-class Gender(models.Model):
-    pet = models.OneToOneField(Pet, on_delete=models.CASCADE, related_name="gender")
-    is_male = models.BooleanField(null=True,blank=True)
-
-    def __str__(self):
-        return f"Gender of {self.pet.name_pet}: {'Male' if self.is_male else 'Female'}"
 
 
 class VaccinationHistory(models.Model):
@@ -214,8 +208,11 @@ class Booking(models.Model):
 
 class Cost(models.Model):
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
-    additional_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-
+    service_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    extra_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    @property
+    def total_fee(self):
+        return self.service_fee + self.extra_fee
     def __str__(self):
         return f"Cost for Booking {self.booking.id}"
 
