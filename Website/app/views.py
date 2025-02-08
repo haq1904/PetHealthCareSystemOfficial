@@ -50,7 +50,17 @@ def logoutPage(request):
 
 def home_customer(request):
     customer=Customer.objects.get(user=request.user)
-    pet, pet_created = Pet.objects.get_or_create(customer=customer)
-    booking, booking_created = Booking.objects.get_or_create(pet=pet)
-    context={'customer': customer,'pet':pet,'booking':booking}
+    pets= Pet.objects.filter(customer=customer)
+    context={'customer': customer,'pets':pets}
     return render(request,'customer/home_customer.html',context)
+
+def profile_customer(request):
+    customer=Customer.objects.get(user=request.user)
+    context={'customer': customer}
+    return render(request,'customer/profile_customer.html',context)
+
+def appointment_registration(request):
+    return render(request,'customer/appointment_registration.html')
+
+def rating(request):
+    return render(request,'customer/rating.html')

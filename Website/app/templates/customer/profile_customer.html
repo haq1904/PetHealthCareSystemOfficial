@@ -1,0 +1,36 @@
+{% extends 'customer/index.html' %}
+{% load static %}
+{% block profile_customer %}
+  <div class="profile-card">
+    <h2>Hồ sơ khách hàng</h2>
+    <div class="profile-info">
+      <p>
+        <strong>Tên khách hàng:</strong> {{ customer.name_customer }}
+      </p>
+      <p>
+        <strong>Số điện thoại:</strong>
+        {% if customer.phone_number_customer %}
+          {{ customer.phone_number_customer }}
+        {% else %}
+          <span class="text-muted">Không có thông tin</span>
+        {% endif %}
+      </p>
+      <p>
+        <strong>Địa chỉ:</strong>
+        {% if customer.address %}
+          {{ customer.address }}
+        {% else %}
+          <span class="text-muted">Không có thông tin</span>
+        {% endif %}
+      </p>
+      <p>
+        <strong>Email:</strong>
+        {% if customer.email_customer %}
+          {{ customer.email_customer }}
+        {% else %}
+          <span class="text-muted">Không có thông tin</span>
+        {% endif %}
+      </p>
+    </div>
+  </div>
+{% endblock %}

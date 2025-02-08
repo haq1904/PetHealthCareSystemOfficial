@@ -227,7 +227,71 @@ body.register-body {
 
 .layout {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    height: 100vh;
+    place-content: center;
+}
+
+.layout-text {
+    border-radius: 87px 0px 86px 0px;
+    -moz-border-radius: 87px 0px 86px 0px;
+    -webkit-border-radius: 87px 0px 86px 0px;
+    border: 4px outset #cccccc;
+    background-color: #0e69c4;
+    display: grid;
+    place-content: center;
+
+}
+
+
+.pet-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pet-table th,
+.pet-table td {
+    padding: 10px;
+    text-align: center;
+}
+
+.pet-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.layout-right {
+    border-radius: 78px 78px 78px 78px;
+    -moz-border-radius: 78px 78px 78px 78px;
+    -webkit-border-radius: 78px 78px 78px 78px;
+    border: 8px inset #cccccc;
+    background-color: #75eff5;
+}
+
+.profile-card {
+    width: 350px;
+    padding: 20px;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: Arial, sans-serif;
+    margin: 20px auto;
+}
+
+h2 {
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.profile-info p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.profile-info strong {
+    color: #333;
+}
+
+.text-muted {
+    color: #888;
 }
