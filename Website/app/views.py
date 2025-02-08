@@ -5,12 +5,10 @@ import json
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from .form import *
+from django.utils.timezone import localtime, now
 
 # Create your views here.
 def register(request):
-    if(request.user.is_authenticated):
-        logout(request)
-        redirect('login')
     form = CreateUserForm()
     if request.method == "POST" :
         form = CreateUserForm(request.POST) 
@@ -23,9 +21,18 @@ def register(request):
     return render(request,'app/register.html',context)
 
 def loginPage(request):
+    if request.user.is_authenticated:
+        last_login = localtime(request.user.last_login).date()
+        today = localtime(now()).date()
+        
+        if last_login != today:
+            logout(request)
+            return redirect('login')
+    
     if(request.user.is_authenticated):
         if(request.user.role == "user"):
             return redirect('home_customer')
+    
     if(request.method== "POST"):
         username=request.POST.get('username')
         password=request.POST.get('password')
@@ -35,11 +42,15 @@ def loginPage(request):
             return redirect('home_customer')
         else:
             messages.info(request,"User name or Password is not correct")
-    return render(request,'app/cutomer/login.html')
+    return render(request,'app/login.html')
 
 def logoutPage(request):
     logout(request)
     return redirect('login')
 
 def home_customer(request):
-    return render(request,'app/home_customer.html')
+    customer=Customer.objects.get(user=request.user)
+    pet, pet_created = Pet.objects.get_or_create(customer=customer)
+    booking, booking_created = Booking.objects.get_or_create(pet=pet)
+    context={'customer': customer,'pet':pet,'booking':booking}
+    return render(request,'customer/home_customer.html',context)

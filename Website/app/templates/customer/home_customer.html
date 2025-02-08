@@ -1,5 +1,8 @@
-{% extends 'app/index' %}
+{% extends 'customer/index.html' %}
 {% load static %}
 {% block home_customer %}
-  <h1>this is home site of customer</h1>
+  <div class="layout" style=" background-image:url('{% static 'images/background_register.jpg' %}');">
+    <div style="height:100%; display: grid; grid-template-columns: 1fr 1fr;grid-template-rows: 1fr 1fr;"></div>
+    <div></div>
+  </div>
 {% endblock %}

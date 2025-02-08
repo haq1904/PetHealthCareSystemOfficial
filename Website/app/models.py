@@ -112,10 +112,11 @@ class Veterinarian(models.Model):
         return self.name_veterinarian
     
 class Pet(models.Model):
-    species = models.CharField(max_length=50)  
-    age = models.PositiveIntegerField()  
-    name_pet = models.CharField(max_length=100) 
-    weight = models.DecimalField(max_digits=5, decimal_places=2)  
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    species = models.CharField(max_length=50, blank=True, null=True)   
+    age = models.PositiveIntegerField(blank=True, null=True)  
+    name_pet = models.CharField(max_length=100, blank=True, null=True) 
+    weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  
     pet_status = models.CharField(max_length=50, blank=True, null=True) 
     pet_type = models.CharField(max_length=50, blank=True, null=True)  
     is_male = models.BooleanField(default=True)
@@ -194,7 +195,6 @@ class Schedule(models.Model):
 
 
 class Booking(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True,blank=True)
     staff = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True,blank=True)
     veterinarian = models.ForeignKey(Veterinarian, on_delete=models.SET_NULL, null=True,blank=True)
     pet = models.ForeignKey(Pet, on_delete=models.SET_NULL, null=True,blank=True)
