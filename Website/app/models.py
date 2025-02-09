@@ -96,6 +96,7 @@ class Customer(models.Model):
     name_customer = models.CharField(max_length=100)
     phone_number_customer = models.CharField(max_length=15,null=True,blank=True)
     address = models.TextField(null=True,blank=True)
+    images = models.ImageField(upload_to='images/customer/', null=True, blank=True)
     email_customer = models.EmailField(null=True,blank=True)
 
     def __str__(self):
@@ -119,7 +120,7 @@ class Pet(models.Model):
     weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  
     pet_status = models.CharField(max_length=50, blank=True, null=True) 
     pet_type = models.CharField(max_length=50, blank=True, null=True) 
-    images = models.ImageField(upload_to='images/', null=True, blank=True) 
+    images = models.ImageField(upload_to='images/pet/', null=True, blank=True) 
     is_male = models.BooleanField(default=True)
 
     def __str__(self):

@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
   </head>
   <body>
-    <header>
+    <header style="height: 20%;">
       <div style="background-image: url('{% static 'images/pet.png' %}');
                   background-size: cover; 
                   background-position: center;
@@ -16,35 +16,37 @@
                   height: 100%; 
                   display: grid; 
                   place-items: center;">
+        <div style="display: flex; width: 100%; margin-top: 10px; ">
+          <div style="display: flex; gap: 10px; width: 50%; 
+                    {% if request.path == '/home_customer/' %}visibility: hidden;{% endif %}">
+            <a href="javascript:window.history.back()"><img style="width: 60px; height:auto; margin-left: 10px; " src="{% static 'images/back.png' %}" alt="back button" /></a>
+            <a href="{% url 'home_customer' %}"><img style="width: 60px; height:auto;" src="{% static 'images/home.png' %}" alt="home button" /></a>
+          </div>
+          <div style="width: 50%; display: flex; justify-content: flex-end;">
+            <a href="{% url 'logout' %}"><img src="{% static 'images/log-out.png' %}" style="width: 60px; height:auto; margin-right:10px;" alt="log out pic" /></a>
+          </div>
+        </div>
         <h1 style="color: aqua;">Pet Health Care System</h1>
       </div>
     </header>
 
     <nav class="navbar"></nav>
-    <body>
-      <div style=" 
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    height:100%;
-    background-image:url('{% static 'images/background_register.jpg' %}'); background-size: cover;">
-        {% block home_customer %}
+    <body style="background-image:url('{% static 'images/background_register.jpg' %}'); background-size: cover;">
+      {% block home_customer %}
 
-        {% endblock %}
-        {% block petInf_customer %}
+      {% endblock %}
+      {% block petInf_customer %}
 
-        {% endblock %}
-        {% block profile_customer %}
+      {% endblock %}
+      {% block profile_customer %}
 
-        {% endblock %}
-        {% block appointment_registration %}
+      {% endblock %}
+      {% block appointment_registration %}
 
-        {% endblock %}
-        {% block rating %}
+      {% endblock %}
+      {% block rating %}
 
-        {% endblock %}
-      </div>
-
-      <a href="{% url 'logout' %}" class="logout-link">Đăng xuất</a>
+      {% endblock %}
     </body>
 
     <footer>&copy; 2025 Trung tâm chăm sóc thú y. Mọi quyền được bảo lưu.</footer>

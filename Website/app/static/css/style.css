@@ -295,3 +295,75 @@ h2 {
 .text-muted {
     color: #888;
 }
+
+
+.container-profile {
+    width: 90%;
+    height: 90%;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: repeat(6, 1fr);
+    grid-row: minmax(100px, auto);
+    grid-template-areas:
+        "image name "
+        "image email  "
+        "image address "
+        "image phone "
+        "image quantity "
+        "image update"
+
+}
+
+.item-text-profile {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    place-content: center;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.item-images-profile {
+    grid-area: image;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-content: center;
+
+}
+
+.item-text1-profile {
+    grid-area: name;
+}
+
+.item-text2-profile {
+    grid-area: email;
+}
+
+.item-text3-profile {
+    grid-area: address;
+}
+
+.item-text4-profile {
+    grid-area: phone;
+}
+
+.item-text5-profile {
+    grid-area: quantity;
+}
+
+.avatar-profile {
+    width: 200px;
+    height: auto;
+}
+
+.modal {
+    display: ;
+    z-index: 1001;
+    height: 40%;
+    width: 40%;
+    border-radius: 78px 78px 78px 78px;
+    -moz-border-radius: 78px 78px 78px 78px;
+    -webkit-border-radius: 78px 78px 78px 78px;
+    border: 8px inset #cccccc;
+    background-color: rgba(0, 255, 255, 0.95);
+}

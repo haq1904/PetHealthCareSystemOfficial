@@ -1,80 +1,86 @@
 {% extends 'customer/index.html' %}
 {% load static %}
 {% block home_customer %}
-  <div>
-    <div style="
+  <div style=" 
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height:100%;
+  ">
+    <div style="display: grid; grid-template-rows: 1fr 1fr;">
+      <div style="
       height: 50%; 
       display: grid; 
       grid-template-columns: 1fr 1fr; 
       ">
-      <div class="layout">
-        <a href="{% url 'profile_customer' %}"><img style="width: 200px;; height: auto;" src="{% static 'images/profile.png' %}" alt="This is profile pic" /></a>
-        <p class="layout-text">Tài khoản</p>
+        <div class="layout">
+          <a href="{% url 'profile_customer' %}"><img style="width: 200px;; height: auto;" src="{% static 'images/profile.png' %}" alt="This is profile pic" /></a>
+          <p class="layout-text">Tài khoản</p>
+        </div>
+        <div class="layout">
+          <a href="{% url 'appointment_registration' %}"><img style="width: 200px; height: auto; margin-top: 25px; margin-left: 60px;" src="{% static 'images/sign.png' %}" alt="This is appointment registration pic" /></a>
+          <p class="layout-text" style="margin-bottom: 40px;">Đăng ký lịch khám</p>
+        </div>
       </div>
       <div class="layout">
-        <a href="{% url 'appointment_registration' %}"><img style="width: 200px; height: auto; margin-top: 25px; margin-left: 60px;" src="{% static 'images/sign.png' %}" alt="This is appointment registration pic" /></a>
-        <p class="layout-text" style="margin-bottom: 40px;">Đăng ký lịch khám</p>
+        <a href="{% url 'rating' %}"><img style="width: 200px; height: auto;" src="{% static 'images/rating.png' %}" alt="This is rating pic" /></a>
+        <p class="layout-text">Đánh giá</p>
       </div>
     </div>
-    <div class="layout">
-      <a href="{% url 'rating' %}"><img style="width: 200px; height: auto;" src="{% static 'images/rating.png' %}" alt="This is rating pic" /></a>
-      <p class="layout-text">Đánh giá</p>
-    </div>
-  </div>
-  <div>
-    <div style="width: 100%;height: 15%; display: grid; place-content: center; ">
-      <p class="layout-right" style="font-size: 24px; margin-top: 20px; ">Danh sách thú cưng</p>
-    </div>
-    <div class="layout-right" style="width: 80%; height: 85%; margin-left: 75px;">
-      {% if pets %}
-        <table class="pet-table" style="margin-top: 10px;">
-          <thead>
-            <tr>
-              <th>Ảnh</th>
-              <th>Tên</th>
-              <th>Loài</th>
-              <th>Tuổi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
+    <div>
+      <div style="width: 100%;height: 15%; display: grid; place-content: center; ">
+        <p class="layout-right" style="font-size: 24px; margin-top: 20px; ">Danh sách thú cưng</p>
+      </div>
+      <div class="layout-right" style="width: 80%; height: 85%; margin-left: 75px;">
+        {% if pets %}
+          <table class="pet-table" style="margin-top: 10px;">
+            <thead>
+              <tr>
+                <th>Ảnh</th>
+                <th>Tên</th>
+                <th>Loài</th>
+                <th>Tuổi</th>
+              </tr>
+            </thead>
+            <tbody>
               {% for pet in pets %}
-                <td>
-                  <img class="pet-img"
-                    src="{% if pet.images %}
-                      {{ pet.images.url }}
+                <tr>
+                  <td>
+                    <img class="pet-img"
+                      src="{% if pet.images %}
+                        {{ pet.images.url }}
+                      {% else %}
+                        {% static 'images/default_pet.jpg' %}
+                      {% endif %}" />
+                  </td>
+                  <td>
+                    {% if pet.name_pet %}
+                      {{ pet.name_pet }}
                     {% else %}
-                      {% static 'images/default_pet.jpg' %}
-                    {% endif %}" />
-                </td>
-                <td>
-                  {% if pet.name_pet %}
-                    {{ pet.name_pet }}
-                  {% else %}
-                    hong có thông tin
-                  {% endif %}
-                </td>
-                <td>
-                  {% if pet.species %}
-                    {{ pet.species }}
-                  {% else %}
-                    Hong có thông tin
-                  {% endif %}
-                </td>
-                <td>
-                  {% if pet.age %}
-                    {{ pet.age }}
-                  {% else %}
-                    Hong có thông tin
-                  {% endif %}
-                </td>
+                      Hong có thông tin
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if pet.species %}
+                      {{ pet.species }}
+                    {% else %}
+                      Hong có thông tin
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if pet.age %}
+                      {{ pet.age }}
+                    {% else %}
+                      Hong có thông tin
+                    {% endif %}
+                  </td>
+                </tr>
               {% endfor %}
-            </tr>
-          </tbody>
-        </table>
-      {% else %}
-        <p style="text-align: center; font-size: 25px; font-style: italic; margin-top: 100px;;">Bạn hong có thú cưng nào hết</p>
-      {% endif %}
+            </tbody>
+          </table>
+        {% else %}
+          <p style="text-align: center; font-size: 25px; font-style: italic; margin-top: 100px;;">Bạn hong có thú cưng nào hết</p>
+        {% endif %}
+      </div>
     </div>
   </div>
 {% endblock %}

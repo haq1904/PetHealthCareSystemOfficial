@@ -56,7 +56,8 @@ def home_customer(request):
 
 def profile_customer(request):
     customer=Customer.objects.get(user=request.user)
-    context={'customer': customer}
+    pet_count=Pet.objects.filter(customer=customer).count()
+    context={'customer': customer,'pet_count':pet_count}
     return render(request,'customer/profile_customer.html',context)
 
 def appointment_registration(request):
