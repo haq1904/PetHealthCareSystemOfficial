@@ -356,14 +356,236 @@ h2 {
     height: auto;
 }
 
-.modal {
-    display: ;
-    z-index: 1001;
-    height: 40%;
-    width: 40%;
+.modal-updateInf {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 10px;
+    width: 25%;
+    height: 30%;
     border-radius: 78px 78px 78px 78px;
     -moz-border-radius: 78px 78px 78px 78px;
     -webkit-border-radius: 78px 78px 78px 78px;
     border: 8px inset #cccccc;
     background-color: rgba(0, 255, 255, 0.95);
+    place-content: center;
+    display: none;
+}
+
+.modal-nd-updateInf {
+    display: grid;
+    width: 90%;
+    height: 100%;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-areas:
+        "close title title"
+        "close address address"
+        "close phone phone"
+        "close save save "
+}
+
+.modal-close-item-updateInf {
+    grid-area: close;
+    font-size: 30px;
+}
+
+.modal-title-item-updateInf {
+    grid-area: title;
+    font-size: 24px;
+}
+
+.modal-address-item-updateInf {
+    grid-area: address;
+    display: grid;
+    grid-template-rows: 1f 1f;
+    grid-template-columns: 1fr;
+
+}
+
+.modal-phone-item-updateInf {
+    grid-area: phone;
+}
+
+.modal-save-item-updateInf {
+    grid-area: save;
+    justify-self: end;
+    margin-top: 10px;
+}
+
+
+.modal-updateImg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 10px;
+    width: 25%;
+    height: 30%;
+    border-radius: 78px 78px 78px 78px;
+    -moz-border-radius: 78px 78px 78px 78px;
+    -webkit-border-radius: 78px 78px 78px 78px;
+    border: 8px inset #cccccc;
+    background-color: rgba(0, 255, 255, 0.95);
+    place-content: center;
+    display: none;
+}
+
+.modal-nd-updateImg {
+    display: grid;
+    width: 90%;
+    height: 100%;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas:
+        "close label label"
+        "close image image"
+        "close savebtn savebtn"
+
+}
+
+.modal-close-item-updateImg {
+    grid-area: close;
+    font-size: 30px;
+}
+
+.modal-updateImg-uploadLabel {
+    margin-top: 20px;
+    grid-area: label;
+}
+
+.modal-uploadImg-iamgeUpload {
+    margin-top: 20px;
+    grid-area: image;
+}
+
+.modal-uploadImg-bntSave {
+    grid-area: savebtn;
+    align-self: end;
+    width: 100%;
+    display: flex;
+    align-items: end;
+    justify-content: end;
+}
+
+.container-pet-registration {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-row: minmax(100px, auto);
+    grid-column: minmax(100px, auto);
+    place-content: center;
+}
+
+.container-pet-registration-form {
+    width: 700px;
+    height: 100%;
+    display: grid;
+    grid-row: minmax(100px, auto);
+    grid-column: minmax(100px, auto);
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(5, 1fr);
+    border-radius: 78px 78px 78px 78px;
+    -moz-border-radius: 78px 78px 78px 78px;
+    -webkit-border-radius: 78px 78px 78px 78px;
+    border: 8px inset #cccccc;
+    background-color: #75eff5;
+    grid-template-areas:
+        "title title "
+        "name petType "
+        "age species"
+        "wei petStatus"
+        "isMale savebtn_pet";
+    place-self: center;
+    margin-top: 35px;
+}
+
+.item-title-pet {
+    grid-area: title;
+    font-size: 24px;
+    font-style: bold;
+}
+
+.item-images-pet {
+    grid-area: image;
+}
+
+.item-name-pet {
+    grid-area: name;
+}
+
+.item-petType-pet {
+    grid-area: petType;
+}
+
+.item-age-pet {
+    grid-area: age;
+}
+
+.item-species-pet {
+    grid-area: species;
+}
+
+.item-wei-pet {
+    grid-area: wei;
+}
+
+.item-petStatus-pet {
+    grid-area: petStatus;
+}
+
+.item-isMale-pet {
+    grid-area: isMale;
+}
+
+.item-savebtn-pet {
+    grid-area: savebtn_pet;
+}
+
+.item-place-pet {
+    display: grid;
+    place-content: center;
+}
+
+.layout-update-petImg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border-radius: 10px;
+    width: 40%;
+    height: 30%;
+    border-radius: 78px 78px 78px 78px;
+    -moz-border-radius: 78px 78px 78px 78px;
+    -webkit-border-radius: 78px 78px 78px 78px;
+    border: 8px inset #cccccc;
+    background-color: #75eff5;
+    place-content: center;
+}
+
+.layout-appointment-registration {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 8fr;
+    grid-template-areas:
+        "title"
+        "content";
+}
+
+.title-appointment-registration {
+    grid-area: title;
+    display: grid;
+    place-content: center;
+}
+
+.content-appointment-registrantion {
+    grid-area: content;
+    display: grid;
+    place-content: center;
 }

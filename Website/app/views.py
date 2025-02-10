@@ -6,6 +6,10 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from .form import *
 from django.utils.timezone import localtime, now
+import os
+from django.conf import settings
+from django.utils.text import slugify
+from .form import PetForm
 
 # Create your views here.
 def register(request):
@@ -60,8 +64,111 @@ def profile_customer(request):
     context={'customer': customer,'pet_count':pet_count}
     return render(request,'customer/profile_customer.html',context)
 
+def update_customer_info(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        address = data.get('address')
+        phone = data.get('phone')
+        customer = Customer.objects.get(user=request.user)
+        customer.address = address
+        request.user.address = address
+        customer.phone_number_customer = phone
+        request.user.phone_number = phone
+        customer.save()
+        return JsonResponse({'message': 'Cập nhật thành công!'}, status=200)
+    return JsonResponse({'message': 'Phương thức không hợp lệ!'}, status=405)
+
 def appointment_registration(request):
-    return render(request,'customer/appointment_registration.html')
+    customer=Customer.objects.get(user=request.user)
+    pets = Pet.objects.filter(customer=customer)
+    context={'pets':pets}
+    return render(request,'customer/appointment_registration.html',context)
 
 def rating(request):
     return render(request,'customer/rating.html')
+
+def pet_registration(request):
+    customer = Customer.objects.get(user=request.user)
+    
+    if request.method == "POST":
+        form = PetForm(request.POST)
+        if form.is_valid():
+            pet=form.save(commit=False)
+            pet.customer=customer
+            pet.save()
+            request.session['pet_id'] = pet.id
+            print(pet.id)
+
+            return redirect('pet_registration_image')  
+    
+    else:
+        form = PetForm()
+
+    context = {'form': form}
+    return render(request, 'customer/pet_registration.html', context)
+
+def pet_registration_image(request):
+    return render(request,'customer/pet_registration_image.html')
+
+def update_customer_image(request):
+    if request.method == "POST":
+        try:
+            image = request.FILES.get("image")
+            if not image:
+                return JsonResponse({"error": "Bạn chưa chọn ảnh!"}, status=400)
+
+            customer = Customer.objects.get(user=request.user)
+
+            if customer.images:
+                old_image_path = customer.images.path 
+                if os.path.exists(old_image_path):
+                    os.remove(old_image_path) 
+
+            new_filename = f"{customer.id}_{slugify(image.name)}"
+
+            customer.images.save(new_filename, image, save=True)
+
+            return JsonResponse({'success': True,
+                "message": "Tải ảnh lên thành công!",
+                "image_url": customer.images.url,
+            })
+        except Exception as e:
+            return JsonResponse({"error": f"Lỗi: {str(e)}"}, status=500)
+
+    return JsonResponse({"error": "Phương thức không hợp lệ!"}, status=405)
+
+def update_pet_image(request):
+    if request.method == "POST":
+        try:
+            image = request.FILES.get("image")
+            if not image:
+                return JsonResponse({"error": "Bạn chưa chọn ảnh!"}, status=400)
+
+
+            pet_id = request.session.get("pet_id")
+            pet = Pet.objects.get(id=pet_id)
+            del request.session["pet_id"]
+            
+
+
+            if pet.images:
+                old_image_path = pet.images.path 
+                if os.path.exists(old_image_path):
+                    os.remove(old_image_path) 
+
+            name, ext = os.path.splitext(image.name)
+            new_filename = f"{pet.id}_{slugify(name)}{ext}"
+
+            pet.images.save(new_filename, image, save=True)
+
+            return JsonResponse({'success': True,
+                "message": "Tải ảnh lên thành công!",
+                "image_url": pet.images.url,
+            })
+        except Exception as e:
+            return JsonResponse({"error": f"Lỗi: {str(e)}"}, status=500)
+
+    return JsonResponse({"error": "Phương thức không hợp lệ!"}, status=405)
+
+def booking(request):
+    return render (request,"customer/booking.html")

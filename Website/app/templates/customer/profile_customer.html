@@ -1,17 +1,54 @@
 {% extends 'customer/index.html' %}
 {% load static %}
 {% block profile_customer %}
-  <div style=" display:none ;display: grid; place-content: center; width: 100%; height: 100%; position:absolute; z-index: 1000;">
-    <div id="editModal" class="modal"></div>
+  <div id="editModal-updateInf" class="modal-updateInf">
+    <div class="modal-nd-updateInf">
+      <div class="modal-close-item-updateInf">
+        <span class="close-updateInf">&times;</span>
+      </div>
+      <div style="color: black;" class="modal-title-item-updateInf">Cập nhật thông tin</div>
+      <div class="modal-address-item-updateInf">
+        <label style="color: black;" for="address">Địa chỉ:</label>
+        <input style="width: 175px;" type="text" id="address" name="address" required />
+      </div>
+
+      <div class="modal-phone-item-updateInf">
+        <label style="color: black;" for="phone">Số điện thoại :</label>
+        <input style="width: 175px;" type="text" id="phone" name="phone" required />
+      </div>
+
+      <input type="hidden" id="csrfToken-inf" value="{{ csrf_token }}" />
+
+      <div class="modal-save-item-updateInf">
+        <button id="saveBtn-updateInf">Lưu thay đổi</button>
+      </div>
+    </div>
   </div>
-  <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100vh;">
+  <div id="editModal-updateImg" class="modal-updateImg">
+    <div class="modal-nd-updateImg">
+      <div class="modal-close-item-updateImg">
+        <span class="close-updateImg">&times;</span>
+      </div>
+      <div class="modal-updateImg-uploadLabel">
+        <label for="imageUpload" class="upload-label" style="color: black;">Tải ảnh lên:</label>
+      </div>
+      <input class="modal-uploadImg-iamgeUpload" type="file" id="imageUpload" name="image" accept="image/*" />
+      <div class="modal-uploadImg-bntSave">
+        <button class="btn-save-Customer">Tải lên</button>
+      </div>
+      <input type="hidden" id="csrfToken-img" value="{{ csrf_token }}" />
+    </div>
+  </div>
+  <div style="display: flex; justify-content: center; width: 100%; height: 100vh;">
     <div class="layout-right" style="width: 50%; height: 80%; display: flex; justify-content: center; align-items: center;">
       <div class="container-profile">
         <div class="item-images-profile item-profile">
-          {% if customer.image.url %}
-            <img src="{{ customer.images.url }}" alt="This is profile pic" />
+          {% if customer.images %}
+            <img class="avatar-profile" src="{{ customer.images.url }}" alt="This is profile pic" />
+            <button class="layout-right" id="editBtn-updateImg">Tải ảnh lên</button>
           {% else %}
             <img class="avatar-profile" src="{% static 'images/avatar_default.png' %}" alt="This is profile pic" />
+            <button class="layout-right" id="editBtn-updateImg">Tải ảnh lên</button>
           {% endif %}
         </div>
         <div class="item-text1-profile item-text-profile">
@@ -42,23 +79,11 @@
           <p>Số lượng thú cưng : {{ pet_count }}</p>
         </div>
         <div class="item-text6-profile item-text-profile">
-          <button class="layout-right" id="editBtn">Cập nhật thông tin</button>
+          <button class="layout-right" id="editBtn-updateInf">Cập nhật thông tin</button>
         </div>
       </div>
     </div>
   </div>
   <script src="{% static 'js/updateInf.js' %}"></script>
+  <script src="{% static 'js/updateImg.js' %}"></script>
 {% endblock %}
-
-{% comment %} <span class="close">&times;</span>
-<h2>Cập nhật thông tin</h2>
-<form id="updateForm">
-  <label for="address">Địa chỉ:</label>
-  <input type="text" id="address" name="address" required />
-
-  <label for="phone">Số điện thoại :</label>
-  <input type="text" id="phone" name="phone" required />
-
-  <button type="submit">Lưu thay đổi</button>
-</form>
-{% endcomment %}

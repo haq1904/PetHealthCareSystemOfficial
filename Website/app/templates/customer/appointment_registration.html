@@ -1,5 +1,35 @@
 {% extends 'customer/index.html' %}
 {% load static %}
 {% block appointment_registration %}
-  <h1>this is registration site</h1>
+  <div class="layout-appointment-registration">
+    <div class="title-appointment-registration">
+      <h3 class="layout-right">Chọn thú cưng để đăng ký</h3>
+    </div>
+    <div class="content-appointment-registrantion">
+      <div class="layout-right">
+        <table class="pet-table" style="margin-top: 10px; width: 900px; height: 450px;">
+          <thead>
+            <tr>
+              <th>Ảnh</th>
+              <th>Tên</th>
+              <th>Loài</th>
+              <th>Tuổi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pet in pets %}
+              <tr>
+                <td>
+                  <img class="pet-img" src="{{ pet.images.url }}" />
+                </td>
+                <td>{{ pet.name_pet }}</td>
+                <td>{{ pet.species }}</td>
+                <td>{{ pet.age }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 {% endblock %}

@@ -17,7 +17,11 @@
           <p class="layout-text">Tài khoản</p>
         </div>
         <div class="layout">
-          <a href="{% url 'appointment_registration' %}"><img style="width: 200px; height: auto; margin-top: 25px; margin-left: 60px;" src="{% static 'images/sign.png' %}" alt="This is appointment registration pic" /></a>
+          {% if pets %}
+            <a href="{% url 'appointment_registration' %}"><img style="width: 200px; height: auto; margin-top: 25px; margin-left: 60px;" src="{% static 'images/sign.png' %}" alt="This is appointment registration pic" /></a>
+          {% else %}
+            <a href="{% url 'pet_registration' %}"><img style="width: 200px; height: auto; margin-top: 25px; margin-left: 60px;" src="{% static 'images/sign.png' %}" alt="This is appointment registration pic" /></a>
+          {% endif %}
           <p class="layout-text" style="margin-bottom: 40px;">Đăng ký lịch khám</p>
         </div>
       </div>

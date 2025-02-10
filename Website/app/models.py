@@ -68,7 +68,7 @@ class CustomUserManager(BaseUserManager):
         )
 
 class CustomUser(AbstractUser):
-    phone_number = models.CharField(max_length=15, unique=True, null=True, blank=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
     address = models.TextField(max_length=100,blank=True, null=True)
     role = models.CharField(
         max_length=20,
@@ -116,12 +116,12 @@ class Pet(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     species = models.CharField(max_length=50, blank=True, null=True)   
     age = models.PositiveIntegerField(blank=True, null=True)  
-    name_pet = models.CharField(max_length=100, blank=True, null=True) 
-    weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  
-    pet_status = models.CharField(max_length=50, blank=True, null=True) 
+    name_pet = models.CharField(max_length=100, blank=False, null=True) 
+    weight = models.DecimalField(max_digits=5, decimal_places=2, blank=False, null=True)  
+    pet_status = models.CharField(max_length=50, blank=False, null=True) 
     pet_type = models.CharField(max_length=50, blank=True, null=True) 
     images = models.ImageField(upload_to='images/pet/', null=True, blank=True) 
-    is_male = models.BooleanField(default=True)
+    is_male = models.BooleanField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.name_pet} ({self.species})"

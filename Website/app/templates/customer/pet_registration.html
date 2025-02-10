@@ -1,0 +1,51 @@
+{% extends 'customer/index.html' %}
+{% load static %}
+
+{% block pet_registration %}
+  <div class="container-pet-registration">
+    <form class="container-pet-registration-form" method="post">
+      {% csrf_token %}
+      <div class="item-title-pet item-place-pet">
+        <h3 style="font-style: oblique;">Đăng ký thú cưng</h3>
+      </div>
+      <div class="item-name-pet item-place-pet">
+        <label for="{{ form.name_pet.id_for_label }}">Tên thú cưng:</label>
+        {{ form.name_pet }}
+      </div>
+
+      <div class="item-petType-pet item-place-pet">
+        <label for="{{ form.pet_type.id_for_label }}">Loại thú cưng:</label>
+        {{ form.pet_type }}
+      </div>
+
+      <div class="item-species-pet item-place-pet">
+        <label for="{{ form.species.id_for_label }}">Loài:</label>
+        {{ form.species }}
+      </div>
+
+      <div class="item-age-pet item-place-pet">
+        <label for="{{ form.age.id_for_label }}">Tuổi:</label>
+        {{ form.age }}
+      </div>
+
+      <div class="item-wei-pet item-place-pet">
+        <label for="{{ form.weight.id_for_label }}">Cân nặng (kg):</label>
+        {{ form.weight }}
+      </div>
+
+      <div class="item-petStatus-pet item-place-pet">
+        <label for="{{ form.pet_status.id_for_label }}">Tình trạng:</label>
+        {{ form.pet_status }}
+      </div>
+
+      <div class="item-isMale-pet item-place-pet">
+        <label for="{{ form.is_male.id_for_label }}">Giới tính:</label>
+        {{ form.is_male }} Đực
+      </div>
+
+      <div class="item-savebtn-pet item-place-pet">
+        <button type="submit">Thêm Thú Cưng</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

@@ -80,14 +80,31 @@ class CustomUserAdmin(UserAdmin):
             except Veterinarian.DoesNotExist:
                 pass  
 
-
+class PetAdmin(admin.ModelAdmin):
+    list_display = ('name_pet', 'customer', 'species', 'age', 'weight', 'pet_status', 'pet_type', 'is_male')  # Hiển thị các cột trong danh sách
+    list_filter = ('species', 'pet_status', 'pet_type', 'is_male')  # Bộ lọc ở sidebar
+    search_fields = ('name_pet', 'customer__name')  # Cho phép tìm kiếm theo tên thú cưng và tên khách hàng
+    list_editable = ('pet_status', 'weight')  # Cho phép chỉnh sửa trực tiếp trên danh sách
+    ordering = ('-age',)  # Sắp xếp mặc định theo tuổi giảm dần
+    readonly_fields = ('images',)  # Chỉ đọc cho ảnh
+    fieldsets = (
+        ('Thông tin cơ bản', {
+            'fields': ('name_pet', 'customer', 'species', 'age', 'is_male')
+        }),
+        ('Thông tin sức khỏe', {
+            'fields': ('weight', 'pet_status', 'pet_type')
+        }),
+        ('Hình ảnh', {
+            'fields': ('images',)
+        }),
+    )
 
 #  **Đăng ký CustomUserAdmin vào Django Admin**
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Staff)
 admin.site.register(Customer)
 admin.site.register(Veterinarian)
-admin.site.register(Pet)
+admin.site.register(Pet,PetAdmin)
 admin.site.register(Examine)
 admin.site.register(MedicalHistory)
 admin.site.register(VaccinationHistory)
