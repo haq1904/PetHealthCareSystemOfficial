@@ -3,32 +3,53 @@
 {% block appointment_registration %}
   <div class="layout-appointment-registration">
     <div class="title-appointment-registration">
-      <h3 class="layout-right">Chọn thú cưng để đăng ký</h3>
+      <a href="{% url 'pet_registration' %}" class="addBtn-title-appointment-registration">Thêm thú cưng</a>
+      <div class="title-title-appointment-registration">
+        <p class="layout-right" style="font-size: 22px; width: fit-content; margin-left: 110px; ">Chọn thú cưng để đăng ký</p>
+      </div>
     </div>
-    <div class="content-appointment-registrantion">
-      <div class="layout-right">
-        <table class="pet-table" style="margin-top: 10px; width: 900px; height: 450px;">
-          <thead>
-            <tr>
-              <th>Ảnh</th>
-              <th>Tên</th>
-              <th>Loài</th>
-              <th>Tuổi</th>
-            </tr>
-          </thead>
-          <tbody>
+    <div class="lay-out-content-appointment-registrantion">
+      <div class="content-apointment-registration">
+        <div class="title-content-appointment-registration">
+          <p style="align-self: center; justify-self: center;">Ảnh</p>
+          <p style="align-self: center; justify-self: center;">Tên</p>
+          <p style="align-self: center; justify-self: center;">Loại</p>
+          <p style="align-self: center; justify-self: center;">Tuổi</p>
+        </div>
+
+        <div class="content-content-appointment-registration">
+          <div class="item-content-content-appointment-registration">
             {% for pet in pets %}
-              <tr>
-                <td>
-                  <img class="pet-img" src="{{ pet.images.url }}" />
-                </td>
-                <td>{{ pet.name_pet }}</td>
-                <td>{{ pet.species }}</td>
-                <td>{{ pet.age }}</td>
-              </tr>
+              <div>
+                <a href="{% url 'booking_date' pet.id %}">
+                  {% if pet.images %}
+                    <img class="pet-img" src="{{ pet.images.url }}" alt="pet pic" />
+                  {% else %}
+                    <img class="pet-img" src="{% static 'images/default_pet.jpg' %}" alt="default pet pic" />
+                  {% endif %}
+                </a>
+              </div>
+
+              <div>
+                <a href="{% url 'booking_date' pet.id %}" style=" text-decoration: none;">{{ pet.name_pet }}</a>
+              </div>
+              <div>
+                {% if pet.pet_type %}
+                  <p>{{ pet.pet_type }}</p>
+                {% else %}
+                  <p>Không có thông tin</p>
+                {% endif %}
+              </div>
+              <div>
+                {% if pet.age %}
+                  <p>{{ pet.age }}</p>
+                {% else %}
+                  <p>Không có thông tin</p>
+                {% endif %}
+              </div>
             {% endfor %}
-          </tbody>
-        </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>

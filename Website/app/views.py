@@ -7,9 +7,9 @@ from django.contrib import messages
 from .form import *
 from django.utils.timezone import localtime, now
 import os
-from django.conf import settings
 from django.utils.text import slugify
-from .form import PetForm
+from .form import PetForm,BookingForm
+from datetime import datetime
 
 # Create your views here.
 def register(request):
@@ -170,5 +170,54 @@ def update_pet_image(request):
 
     return JsonResponse({"error": "Phương thức không hợp lệ!"}, status=405)
 
-def booking(request):
-    return render (request,"customer/booking.html")
+def booking(request,pet_id,date):
+    pet=Pet.objects.get(id=pet_id)
+    vet_id = request.GET.get('vet_id')
+    part=request.GET.get('part')
+    if request.method=="POST":
+        formBookingForm=FormBookingForm(request.POST)
+        bookingForm=BookingForm(request.POST)
+        if formBookingForm.is_valid() and bookingForm.is_valid():
+            booking=bookingForm.save(commit=False)
+            
+    context={'pet':pet}
+    return render (request,"customer/booking.html",context)
+
+def booking_date(request, pet_id):
+    date = request.session.get("selected_date")  
+
+    if request.method == "POST":
+        dateForm = AppointmentDateForm(request.POST)
+        if dateForm.is_valid():
+            date = dateForm.cleaned_data['date']
+            request.session["selected_date"] = str(date) 
+
+    elif request.method == "GET" and "selected_date" in request.session:
+        dateForm = AppointmentDateForm(initial={'date': date})  
+
+    else:
+        dateForm = AppointmentDateForm()
+
+    schedules = Schedule.objects.filter(date=date) if date else []
+
+    context = {
+        'dateForm': dateForm,
+        'schedules': schedules,
+        'pet_id': pet_id,
+        'date': date
+    }
+
+    return render(request, "customer/booking_date.html", context)
+
+
+
+def save_selected_date(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        selected_date = data.get("selected_date")
+        request.session["selected_date"] = selected_date  # Lưu vào session
+        return JsonResponse({"status": "success"})
+
+def get_selected_date(request):
+    selected_date = request.session.get("selected_date", "")
+    return JsonResponse({"selected_date": selected_date})

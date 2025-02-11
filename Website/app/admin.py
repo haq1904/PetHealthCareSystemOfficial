@@ -2,27 +2,24 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import *
 import logging
-
+from django.core.exceptions import ValidationError
 logger = logging.getLogger('django')
 
 
 class CustomUserAdmin(UserAdmin):
 
-    # 🏷 **1. list_display** - Hiển thị các trường trong danh sách user
     list_display = ('username', 'email', 'phone_number', 'address', 'role', 'is_staff', 'is_active')
 
-    # 🔍 **2. search_fields** - Thêm chức năng tìm kiếm theo các trường
+    
     search_fields = ('username', 'email', 'phone_number')
 
-    # ✏ **3. list_editable** - Cho phép chỉnh sửa trực tiếp từ danh sách user
+    
     list_editable = ('phone_number', 'address', 'role')
 
-    #  **4. fieldsets** - Cấu hình trang chỉnh sửa User
     fieldsets = UserAdmin.fieldsets + (
         ('Thông tin bổ sung', {'fields': ('phone_number', 'address', 'role')}),
     )
 
-    # **5. add_fieldsets** - Cấu hình trang tạo User mới
     add_fieldsets = UserAdmin.add_fieldsets + (
         ('Thông tin bổ sung', {'fields': ('phone_number', 'address', 'role')}),
     )
@@ -53,12 +50,8 @@ class CustomUserAdmin(UserAdmin):
                 customer.phone_number_customer = obj.phone_number  
                 customer.address = obj.address  
                 customer.save()
-                print(f"Updated customer: {customer}")
-                logger.debug(f"Updated customer: {customer}")
             except Customer.DoesNotExist:
                 Customer.objects.create(user=obj, name_customer=obj.username) 
-                print("Created new customer")
-                logger.debug("Created new customer")
 
         elif obj.role == 'staff':
             try:
@@ -81,12 +74,12 @@ class CustomUserAdmin(UserAdmin):
                 pass  
 
 class PetAdmin(admin.ModelAdmin):
-    list_display = ('name_pet', 'customer', 'species', 'age', 'weight', 'pet_status', 'pet_type', 'is_male')  # Hiển thị các cột trong danh sách
-    list_filter = ('species', 'pet_status', 'pet_type', 'is_male')  # Bộ lọc ở sidebar
-    search_fields = ('name_pet', 'customer__name')  # Cho phép tìm kiếm theo tên thú cưng và tên khách hàng
-    list_editable = ('pet_status', 'weight')  # Cho phép chỉnh sửa trực tiếp trên danh sách
-    ordering = ('-age',)  # Sắp xếp mặc định theo tuổi giảm dần
-    readonly_fields = ('images',)  # Chỉ đọc cho ảnh
+    list_display = ('name_pet', 'customer', 'species', 'age', 'weight', 'pet_status', 'pet_type', 'is_male') 
+    list_filter = ('species', 'pet_status', 'pet_type', 'is_male') 
+    search_fields = ('name_pet', 'customer__name')  
+    list_editable = ('pet_status', 'weight')  
+    ordering = ('-age',)  
+    readonly_fields = ('images',) 
     fieldsets = (
         ('Thông tin cơ bản', {
             'fields': ('name_pet', 'customer', 'species', 'age', 'is_male')
@@ -98,6 +91,19 @@ class PetAdmin(admin.ModelAdmin):
             'fields': ('images',)
         }),
     )
+
+
+
+class ScheduleAdmin(admin.ModelAdmin):
+    list_display = ('veterinarian', 'date', 'morning', 'afternoon', 'night')
+
+    def save_model(self, request, obj, form, change):
+        # Xóa lịch cũ nếu đã tồn tại lịch trùng
+        Schedule.objects.filter(veterinarian=obj.veterinarian, date=obj.date).exclude(id=obj.id).delete()
+        
+        # Lưu lịch mới
+        super().save_model(request, obj, form, change)
+
 
 #  **Đăng ký CustomUserAdmin vào Django Admin**
 admin.site.register(CustomUser, CustomUserAdmin)
@@ -111,12 +117,12 @@ admin.site.register(VaccinationHistory)
 admin.site.register(Cage)
 admin.site.register(Hospitalization)
 admin.site.register(PetStatus)
-admin.site.register(Schedule)
+admin.site.register(Schedule,ScheduleAdmin)
 admin.site.register(Booking)
 admin.site.register(Cost)
-admin.site.register(Form)
+admin.site.register(FormBooking)
 admin.site.register(BookingStatus)
 admin.site.register(Review)
 admin.site.register(CageType)
 admin.site.register(CageStatus)
-
+admin.site.register(AppointmentDate)

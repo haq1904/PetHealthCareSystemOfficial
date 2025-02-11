@@ -23,7 +23,7 @@
             <a href="{% url 'home_customer' %}"><img style="width: 60px; height:auto;" src="{% static 'images/home.png' %}" alt="home button" /></a>
           </div>
           <div style="width: 50%; display: flex; justify-content: flex-end;">
-            <a href="{% url 'logout' %}"><img src="{% static 'images/log-out.png' %}" style="width: 60px; height:auto; margin-right:10px;" alt="log out pic" /></a>
+            <a href="{% url 'logout' %}" onclick="return confirmLogout();"><img src="{% static 'images/log-out.png' %}" style="width: 60px; height: auto; margin-right: 10px;" alt="log out pic" /></a>
           </div>
         </div>
         <h1 style="color: aqua;">Pet Health Care System</h1>
@@ -53,6 +53,17 @@
       {% block pet_registration_image %}
 
       {% endblock %}
+      {% block booking %}
+
+      {% endblock %}
+      {% block booking_date %}
+
+      {% endblock %}
+      <script>
+        function confirmLogout() {
+          return confirm('Bạn có chắc chắn muốn đăng xuất không?')
+        }
+      </script>
     </body>
 
     <footer>&copy; 2025 Trung tâm chăm sóc thú y. Mọi quyền được bảo lưu.</footer>

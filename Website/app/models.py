@@ -85,6 +85,7 @@ class CustomUser(AbstractUser):
 class Staff(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name_staff = models.CharField(max_length=100)
+    real_name_Staff=models.CharField(max_length=100,blank=True,null=True)
     phone_number_staff = models.CharField(max_length=15,null=True,blank=True)
     email_staff = models.EmailField(null=True,blank=True)
 
@@ -105,6 +106,7 @@ class Customer(models.Model):
 class Veterinarian(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name_veterinarian = models.CharField(max_length=100)
+    real_name_veterinarian=models.CharField(max_length=100,blank=True,null=True)
     phone_number_veterinarian = models.CharField(max_length=15,null=True,blank=True)
     specialization = models.CharField(max_length=100,null=True,blank=True)
     email_vet = models.EmailField(null=True,blank=True)
@@ -187,13 +189,20 @@ class PetStatus(models.Model):
     
 class Schedule(models.Model):
     veterinarian = models.ForeignKey(Veterinarian, on_delete=models.CASCADE)
-    date = models.DateField()
+    date = models.DateField(blank=False,null=True)
     morning = models.BooleanField(default=False)
     afternoon = models.BooleanField(default=False)
     night = models.BooleanField(default=False)
 
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['veterinarian', 'date'], name='unique_schedule_per_vet_per_day')
+        ]
+
+
     def __str__(self):
-        return f"Schedule for Veterinarian {self.id} on {self.date}"
+        return f"Schedule for Veterinarian {self.veterinarian.name_veterinarian} on {self.date}"
 
 
 class Booking(models.Model):
@@ -202,24 +211,34 @@ class Booking(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.SET_NULL, null=True,blank=True)
     cancel_date = models.DateTimeField(null=True, blank=True)
     refund_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    booking_time = models.DateTimeField(auto_now_add=True)
+    booking_date = models.DateTimeField(auto_now_add=True)
     store_pet = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Booking {self.id}"
 
+class AppointmentDate(models.Model):
+    booking = models.ForeignKey('Booking', on_delete=models.CASCADE)  
+    date = models.DateField()  
+    morning = models.BooleanField(default=False)  
+    afternoon = models.BooleanField(default=False)  
+    night = models.BooleanField(default=False)  
+
+    def __str__(self):
+        return f"Booking {self.booking} - {self.date}"
+
 
 class Cost(models.Model):
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
-    service_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    extra_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    service_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True)
+    extra_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True)
     @property
     def total_fee(self):
         return self.service_fee + self.extra_fee
     def __str__(self):
         return f"Cost for Booking {self.booking.id}"
 
-class Form(models.Model):
+class FormBooking(models.Model):
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
     examine = models.BooleanField(default=False)
     hospitalization = models.BooleanField(default=False)
@@ -231,7 +250,7 @@ class Form(models.Model):
 class BookingStatus(models.Model):
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
     cancelled = models.BooleanField(default=False)
-    awaiting = models.BooleanField(default=False)
+    awaiting = models.BooleanField(default=True)
     confirm = models.BooleanField(default=False)
     success = models.BooleanField(default=False)
 

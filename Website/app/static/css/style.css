@@ -254,8 +254,8 @@ body.register-body {
 }
 
 .pet-img {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
 }
 
@@ -582,10 +582,189 @@ h2 {
     grid-area: title;
     display: grid;
     place-content: center;
+    grid-template-columns: 1fr 2fr;
+    grid-template-areas:
+        "addBtn-appointment-registration title-title-appointment-registration";
 }
 
-.content-appointment-registrantion {
+.addBtn-title-appointment-registration {
+    grid-area: addBtn-appointment-registration;
+    border-radius: 78px 78px 78px 78px;
+    -moz-border-radius: 78px 78px 78px 78px;
+    -webkit-border-radius: 78px 78px 78px 78px;
+    border: 8px inset #cccccc;
+    background-color: #75eff5;
+    font-size: 22px;
+    text-decoration: none;
+    align-content: center;
+    justify-content: center;
+    height: fit-content;
+    width: fit-content;
+    justify-self: end;
+
+}
+
+.title-title-appointment-registration {
+    grid-area: title-title-appointment-registration;
+    width: 100%;
+}
+
+
+.layout-content-appointment-registrantion {
     grid-area: content;
     display: grid;
+}
+
+.content-apointment-registration {
+    width: 900px;
+    height: 500px;
+    border-radius: 78px 78px 78px 78px;
+    -moz-border-radius: 78px 78px 78px 78px;
+    -webkit-border-radius: 78px 78px 78px 78px;
+    border: 8px inset #cccccc;
+    background-color: #75eff5;
+    justify-self: center;
+    align-self: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 8fr;
+    grid-template-areas:
+        "title-content title-content title-content title-content"
+        "content-content content-content content-content content-content";
+
+}
+
+.title-content-appointment-registration {
+    grid-area: title-content;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr
+}
+
+.content-content-appointment-registration {
+    grid-area: content-content;
+    display: block;
+    overflow-y: auto;
+    height: 370px;
+}
+
+.item-content-content-appointment-registration {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    place-items: center;
+    gap: 20px;
+    height: 60px;
+}
+
+.layout-booking-date {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-rows: 1fr 7fr;
+    grid-template-areas:
+        "title-layout-booking-date"
+        "content-layout-booking-date";
+}
+
+.title-layout-booking-date {
+    grid-area: title-layout-booking-date;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.right-title-layout-booking-date {
+    display: grid;
+    height: fit-content;
+    place-content: end;
+}
+
+.mid-title-layout-booking-date {
+    display: grid;
+    border-radius: 78px 78px 78px 78px;
+    -moz-border-radius: 78px 78px 78px 78px;
+    -webkit-border-radius: 78px 78px 78px 78px;
+    border: 8px inset #cccccc;
+    background-color: #75eff5;
+    width: fit-content;
+    height: fit-content;
+    font-size: 20px;
+    place-self: center;
+}
+
+.left-title-layout-booking-date {
+    display: grid;
+    border-radius: 78px 78px 78px 78px;
+    -moz-border-radius: 78px 78px 78px 78px;
+    -webkit-border-radius: 78px 78px 78px 78px;
+    border: 8px inset #cccccc;
+    background-color: #75eff5;
+    width: fit-content;
+    height: fit-content;
+    font-size: 20px;
+    text-decoration: none;
+    margin-top: 5px;
+
+}
+
+.content-layout-booking-date {
+    grid-area: content-layout-booking-date;
+    display: grid;
+    border-radius: 78px 78px 78px 78px;
+    -moz-border-radius: 78px 78px 78px 78px;
+    -webkit-border-radius: 78px 78px 78px 78px;
+    border: 8px inset #cccccc;
+    background-color: #75eff5;
+    width: 70%;
+    height: 500px;
+    grid-template-rows: 1fr 1fr 8fr;
+    place-self: center;
     place-content: center;
+}
+
+.title-content-layout-booking-date {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 800px;
+    justify-items: center;
+    align-items: center;
+}
+
+.item-content-layout-booking-date {
+    margin-bottom: 5px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 800px;
+    height: 48px;
+    justify-self: end;
+    place-items: center;
+    border-radius: 100px 100px 100px 100px;
+    -webkit-border-radius: 100px 100px 100px 100px;
+    -moz-border-radius: 100px 100px 100px 100px;
+    background: #09aea5;
+    border: 11px solid rgba(80, 255, 225, 0.5);
+
+
+}
+
+#title-showpet-home-customer {
+    width: 100%;
+    height: 50px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    place-items: center;
+}
+
+#content-showpet-home-customer {
+    width: 100%;
+    height: 400px;
+    display: block;
+    overflow-y: auto;
+}
+
+#item-content-showpet-home-customer {
+    display: grid;
+    place-items: center;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    height: 60px;
 }

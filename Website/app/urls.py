@@ -15,8 +15,10 @@ urlpatterns = [
     path('update_pet_image/',views.update_pet_image,name='update_pet_image'),
     path('pet_registration/',views.pet_registration,name='pet_registration'),
     path('pet_registration_image/',views.pet_registration_image,name='pet_registration_image'),
-    path('booking/<int:pet_id>/', views.booking, name='booking'),
-
+    path('booking/<int:pet_id>/<str:date>/', views.booking, name='booking'),
+    path('booking_date/<int:pet_id>/', views.booking_date, name='booking_date'),
+    path("save_selected_date/", views.save_selected_date, name="save_selected_date"),
+    path("get_selected_date/", views.get_selected_date, name="get_selected_date"),
     
 
 ]

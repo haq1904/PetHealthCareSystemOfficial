@@ -1,0 +1,66 @@
+{% extends 'customer/index.html' %}
+{% load static %}
+
+{% block booking_date %}
+  <div class="layout-booking-date">
+    <div class="title-layout-booking-date">
+      <div class="right-title-layout-booking-date">
+        <p class="layout-right" style="width: fit-content; margin-bottom: 0px;margin-top: 5px;;height: 35px;">Chọn ngày khám</p>
+        <form method="POST" style="height: 10px;">
+          {% csrf_token %}
+
+          <input type="date" id="appointment_date" name="date" value="{{ date|default:'' }}" required />
+
+          <button type="submit">Xác nhận</button>
+        </form>
+      </div>
+      <p class="mid-title-layout-booking-date">Danh sách bác sĩ có lịch trống</p>
+      <a href="{% url 'booking' pet_id=pet_id date=date %}" class="left-title-layout-booking-date">Bỏ qua</a>
+    </div>
+    <div class="content-layout-booking-date">
+      <div class="title-content-layout-booking-date">
+        <p>Tên bác sĩ</p>
+        <p>Sáng</p>
+        <p>Chiều</p>
+        <p>Tối</p>
+      </div>
+      <div style="height: 400px; overflow-y: auto;">
+        {% if schedules %}
+          {% for schedule in schedules %}
+            <div class="item-content-layout-booking-date">
+              <p style="  margin-bottom: 10px;">{{ schedule.veterinarian.real_name_veterinarian }}</p>
+              <div style="  margin-bottom: 10px;">
+                {% if schedule.morning %}
+                  <a href="{% url 'booking' pet_id=pet_id date=date %}?vet_id={{ schedule.veterinarian.id }}&part=morning"><img style="height: 20px; width: auto;" src="{% static 'images/ok.png' %}" alt="ok" /></a>
+                {% else %}
+                  <img style="height: 20px; width: auto;" src="{% static 'images/busy.png' %}" alt="busy" />
+                {% endif %}
+              </div>
+              <div style="  margin-bottom: 10px;">
+                {% if schedule.afternoon %}
+                  <a href="{% url 'booking' pet_id=pet_id date=date %}?vet_id={{ schedule.veterinarian.id }}&part=afternoon"><img style="height: 20px; width: auto;" src="{% static 'images/ok.png' %}" alt="ok" /></a>
+                {% else %}
+                  <img style="height: 20px; width: auto;" src="{% static 'images/busy.png' %}" alt="busy" />
+                {% endif %}
+              </div>
+              <div style="  margin-bottom: 10px;">
+                {% if schedule.night %}
+                  <a href="{% url 'booking' pet_id=pet_id date=date %}?vet_id={{ schedule.veterinarian.id }}&part=night"><img style="height: 20px; width: auto;" src="{% static 'images/ok.png' %}" alt="ok" /></a>
+                {% else %}
+                  <img style="height: 20px; width: auto;" src="{% static 'images/busy.png' %}" alt="busy" />
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <h3 style="justify-self: center;">Không có bác sĩ làm việc vào ngày này.</h3>
+        {% endif %}
+      </div>
+      {% comment %} <div style="width: 90%;">
+        <p>Ngày hẹn: {{ date|date:'d/m/Y' }} .Ngày này sẽ là ngày đặt lich khám nếu bạn không chọn bác sĩ. Chúng tôi sẽ sắp xếp bác sĩ cho thú cưng của bạn</p>
+      </div> {% endcomment %}
+    </div>
+  </div>
+  <script src="{% static 'js/booking_date.js' %}"></script>
+{% endblock %}
+<a href="{% url 'booking' %}?idpet={{ idpet }}&idvet={{ idvet }}&part={{ part }}&date={{ date }}"></a>
