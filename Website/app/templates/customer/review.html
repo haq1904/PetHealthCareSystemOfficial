@@ -1,0 +1,57 @@
+{% extends 'customer/index.html' %}
+{% load static %}
+
+{% block review %}
+  <div style="width: 100%; height: 100%; display: grid; place-content: center;">
+    <div class="layout-booking">
+      <h3 style="place-self: center;">Thông tin lịch khám</h3>
+
+      <div class="info-pet-bill">
+        <div class="item-info-pet-bill">
+          {% if booking.pet.images %}
+            <img class="pet-img" style="width:70px ; height:70px;" src="{{ booking.pet.images.url }}" alt="pet " />
+          {% else %}
+            <img class="pet-img" style="width:70px ; height:70px;" src="{% static 'images/default_pet.jpg' %}" alt="pet pic" />
+          {% endif %}
+        </div>
+        <p class="item-info-pet-bill" style="padding-bottom: 0px;">
+          Ngày đặt lịch khám: <br />{{ formatted_date }} <br />{{ part }}
+        </p>
+        <span class="item-info-pet-bill">Pet : {{ booking.pet.name_pet }} --- ID : {{ booking.pet.id }}</span>
+        <p class="item-info-pet-bill" style="padding-top: 18px;">Chủ của pet : {{ booking.pet.customer.name_customer }}</p>
+        <p class="item-info-pet-bill" style="padding-top: 18px;">
+          Bác sĩ phụ trách : <br />
+          <span>
+            {% if booking.veterinarian %}
+              {{ booking.veterinarian.real_name_veterinarian }} --- ID : {{ booking.veterinarian.id }}
+            {% else %}
+              Chưa cập nhật bác sĩ phụ trách
+            {% endif %}
+          </span>
+        </p>
+        <span class="item-info-pet-bill" style="padding-top: 18px;">Tình trạng : {{ booking.pet.pet_status }}</span>
+      </div>
+
+      <form method="POST" id="bookingForm" class="confirm-info-pet-bill">
+        {% csrf_token %}
+        <h3 class="item-info-pet-bill">Nhận xét tại đây</h3>
+        <div class="content-confirm-review-customer">
+          <div>
+            <label for="{{ form.form_customer.id_for_label }}" class="item-info-pet-bill">{{ form.form_customer.label }}</label>
+            {{ form.form_customer }}
+          </div>
+          <div>
+            <label for="{{ form.score.id_for_label }}" class="item-info-pet-bill">{{ form.score.label }}</label>
+            {{ form.score }}
+          </div>
+        </div>
+        <button class="item-info-pet-bill" style="border-radius: 78px 78px 78px 78px; background-color: antiquewhite;" type="submit" onclick="return confirmBooking()">Đánh giá</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    function confirmBooking() {
+      return confirm('Xác nhận đánh giá!!')
+    }
+  </script>
+{% endblock %}

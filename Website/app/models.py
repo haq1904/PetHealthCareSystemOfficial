@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
-
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils import timezone
 
 class UserRole(models.TextChoices):
     USER = 'user', 'User'
@@ -128,17 +129,7 @@ class Pet(models.Model):
     def __str__(self):
         return f"{self.name_pet} ({self.species})"
 
-class Examine(models.Model):
-    pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
-    diagnosis = models.TextField(null=True,blank=True)
-    symptom = models.TextField(null=True,blank=True)
-    start_date = models.DateField(null=True,blank=True)
-    end_date = models.DateField(null=True, blank=True)
-    treatment_process = models.TextField(null=True,blank=True)
-    result = models.TextField(null=True,blank=True)
 
-    def __str__(self):
-        return f"Examine for Pet {self.pet.name_pet}"
 
 class MedicalHistory(models.Model):
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
@@ -167,24 +158,6 @@ class Cage(models.Model):
     def __str__(self):
         return f"Cage {self.id} with Capacity {self.capacity}"
     
-class Hospitalization(models.Model):
-    pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
-    cage = models.ForeignKey(Cage, on_delete=models.CASCADE)
-    start_date = models.DateField(null=True,blank=True)
-    end_date = models.DateField(null=True, blank=True)
-    symptom = models.TextField(null=True,blank=True)
-
-    def __str__(self):
-        return f"Hospitalization for Pet {self.pet.name_pet} in Cage {self.cage.id}"
-
-class PetStatus(models.Model):
-    hospitalization = models.ForeignKey(Hospitalization, on_delete=models.CASCADE)
-    video = models.FileField(upload_to='videos/',null=True, blank=True)
-    image = models.ImageField(upload_to='images/', null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-
-    def __str__(self):
-        return f"Status for Pet in Hospitalization {self.hospitalization.id}"
 
     
 class Schedule(models.Model):
@@ -208,18 +181,45 @@ class Schedule(models.Model):
 class Booking(models.Model):
     staff = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True,blank=True)
     veterinarian = models.ForeignKey(Veterinarian, on_delete=models.SET_NULL, null=True,blank=True)
-    pet = models.ForeignKey(Pet, on_delete=models.SET_NULL, null=True,blank=True)
+    pet = models.ForeignKey(Pet, on_delete=models.CASCADE, null=True,blank=True)
+    cage = models.ForeignKey(Cage,on_delete=models.SET_NULL, null=True,blank=True)
     cancel_date = models.DateTimeField(null=True, blank=True)
-    refund_fee = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    refund_fee = models.DecimalField(max_digits=10, decimal_places=2,default=0, null=True, blank=True)
     booking_date = models.DateTimeField(auto_now_add=True)
     store_pet = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Booking {self.id}"
+    
+
+    
+    
+class Examine(models.Model):
+    booking = models.OneToOneField(Booking, on_delete=models.CASCADE,primary_key=True)
+    diagnosis = models.TextField(null=True,blank=True)
+    symptom = models.TextField(null=True,blank=True)
+    start_date = models.DateField(null=True,blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    treatment_process = models.TextField(null=True,blank=True)
+    result = models.TextField(null=True,blank=True)
+
+    def __str__(self):
+        return f"Examine for Pet {self.booking.pet.name_pet}"
+    
+class Hospitalization(models.Model):
+    booking = models.OneToOneField(Booking, on_delete=models.CASCADE,primary_key=True)
+    start_date = models.DateField(null=True,blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    symptom = models.TextField(null=True,blank=True)
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    def __str__(self):
+        return f"Hospitalization for Pet {self.booking.pet.name_pet} in Cage {self.booking.cage.id}"
+
 
 class AppointmentDate(models.Model):
-    booking = models.ForeignKey('Booking', on_delete=models.CASCADE)  
-    date = models.DateField()  
+    booking = models.OneToOneField(Booking, on_delete=models.CASCADE, primary_key=True)  
+    date = models.DateField(blank=True,null=True)
     morning = models.BooleanField(default=False)  
     afternoon = models.BooleanField(default=False)  
     night = models.BooleanField(default=False)  
@@ -229,17 +229,41 @@ class AppointmentDate(models.Model):
 
 
 class Cost(models.Model):
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+    booking = models.OneToOneField(Booking, on_delete=models.CASCADE, primary_key=True) 
     service_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True)
     extra_fee = models.DecimalField(max_digits=10, decimal_places=2, default=0, null=True, blank=True)
+    extra_service = models.TextField(blank=True,null=False)
+    @property
+    def calculate_service_fee(self):
+        fee = 0
+        try:
+            form_booking = FormBooking.objects.get(booking=self.booking)
+        except FormBooking.DoesNotExist:
+            return fee
+
+        if form_booking.examine:
+            fee += 200000
+        if form_booking.hospitalization:
+            fee += 300000
+        if form_booking.vaccination:
+            fee += 500000
+
+        return fee 
+
+    def save(self, *args, **kwargs):
+        self.service_fee = self.calculate_service_fee 
+        super().save(*args, **kwargs)
+
     @property
     def total_fee(self):
         return self.service_fee + self.extra_fee
+    
     def __str__(self):
         return f"Cost for Booking {self.booking.id}"
 
+
 class FormBooking(models.Model):
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+    booking = models.OneToOneField(Booking, on_delete=models.CASCADE, primary_key=True)
     examine = models.BooleanField(default=False)
     hospitalization = models.BooleanField(default=False)
     vaccination = models.BooleanField(default=False)
@@ -248,7 +272,7 @@ class FormBooking(models.Model):
         return f"Form for Booking {self.booking.id}"
 
 class BookingStatus(models.Model):
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+    booking = models.OneToOneField(Booking, on_delete=models.CASCADE, primary_key=True)
     cancelled = models.BooleanField(default=False)
     awaiting = models.BooleanField(default=True)
     confirm = models.BooleanField(default=False)
@@ -258,19 +282,19 @@ class BookingStatus(models.Model):
         return f"Status for Booking {self.booking.id}"
 
 class Review(models.Model):
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+    booking = models.OneToOneField(Booking, on_delete=models.CASCADE, primary_key=True) 
     form_customer = models.TextField(null=True,blank=True)
-    form_veterinarian = models.TextField(null=True,blank=True)
     time = models.DateTimeField(auto_now_add=True)
-    score = models.IntegerField(null=True,blank=True)
+    score = models.IntegerField(null=True,blank=True,validators=[MinValueValidator(0), MaxValueValidator(10)])
 
     def __str__(self):
-        return f"Review for Booking {self.booking.id}"
+       local_time = timezone.localtime(self.time)  
+       return f"Review for Booking {self.booking.id} Time:{self.time}"
     
 
 
 class CageType(models.Model):
-    cage = models.ForeignKey(Cage, on_delete=models.CASCADE)
+    cage = models.OneToOneField(Cage, on_delete=models.CASCADE, primary_key=True)
     isolation = models.BooleanField(default=False)
     recovery = models.BooleanField(default=False)
     long_term = models.BooleanField(default=False)
@@ -280,7 +304,7 @@ class CageType(models.Model):
         return f"Cage Type for Cage {self.cage.id}"
 
 class CageStatus(models.Model):
-    cage = models.ForeignKey(Cage, on_delete=models.CASCADE)
+    cage = models.OneToOneField(Cage, on_delete=models.CASCADE, primary_key=True)
     vacant = models.BooleanField(default=True)
     in_use = models.BooleanField(default=False)
     dirty = models.BooleanField(default=False)

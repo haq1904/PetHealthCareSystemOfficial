@@ -1,0 +1,37 @@
+{% extends 'customer/pick_pet_review.html' %}
+
+{% block title %}
+  <p class="layout-right" style="font-size: 22px; width: fit-content; place-self: center; margin-bottom: 2px;">Chọn lịch khám để đánh giá</p>
+{% endblock %}
+
+{% block title_content %}
+  <div class="title-content-appointment-registration">
+    <p style="align-self: center; justify-self: center;">Ngày đặt lịch</p>
+    <p style="align-self: center; justify-self: center;">Loại dịch vụ</p>
+    <p style="align-self: center; justify-self: center;">Bác sĩ phụ trách</p>
+    <p style="align-self: center; justify-self: center;">Giá</p>
+  </div>
+{% endblock %}
+
+{% block content %}
+  {% if booking_options %}
+    <div class="content-content-appointment-registration">
+      {% for item in booking_options %}
+        <a href="{% url 'review' item.booking.id %}" class="item-content-content-appointment-registration">
+          <p style="color: black; ">{{ item.booking.appointmentdate.date|date:'d/m/Y' }}</p>
+          <p style="color: black; ">{{ item.options|join:', ' }}</p>
+          <div>
+            {% if item.booking.veterinarian %}
+              <p style="color: black; ">{{ item.booking.veterinarian.real_name_veterinarian }}</p>
+            {% else %}
+              <p style="color: black;">Chưa có thông tin bác sĩ</p>
+            {% endif %}
+          </div>
+          <p style="color: black; ">{{ item.booking.cost.total_fee }}</p>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <h4 style="width: fit-content; justify-self: center;">Thú cưng chưa có lịch khám, hãy đặt lịch khám ở trang chủ. Xin cảm ơn bạn!!</h4>
+  {% endif %}
+{% endblock %}

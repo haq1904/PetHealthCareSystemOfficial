@@ -2,54 +2,62 @@
 {% load static %}
 {% block appointment_registration %}
   <div class="layout-appointment-registration">
-    <div class="title-appointment-registration">
-      <a href="{% url 'pet_registration' %}" class="addBtn-title-appointment-registration">Thêm thú cưng</a>
-      <div class="title-title-appointment-registration">
-        <p class="layout-right" style="font-size: 22px; width: fit-content; margin-left: 110px; ">Chọn thú cưng để đăng ký</p>
+    {% block title %}
+      <div class="title-appointment-registration">
+        <a href="{% url 'pet_registration' %}" class="addBtn-title-appointment-registration">Thêm thú cưng</a>
+        <div class="title-title-appointment-registration">
+          <p class="layout-right" style="font-size: 22px; width: fit-content; margin-bottom: 0px;">Chọn thú cưng để đăng ký</p>
+        </div>
       </div>
-    </div>
+    {% endblock %}
+
     <div class="lay-out-content-appointment-registrantion">
       <div class="content-apointment-registration">
-        <div class="title-content-appointment-registration">
-          <p style="align-self: center; justify-self: center;">Ảnh</p>
-          <p style="align-self: center; justify-self: center;">Tên</p>
-          <p style="align-self: center; justify-self: center;">Loại</p>
-          <p style="align-self: center; justify-self: center;">Tuổi</p>
-        </div>
-
-        <div class="content-content-appointment-registration">
-          <div class="item-content-content-appointment-registration">
-            {% for pet in pets %}
-              <div>
-                <a href="{% url 'booking_date' pet.id %}">
-                  {% if pet.images %}
-                    <img class="pet-img" src="{{ pet.images.url }}" alt="pet pic" />
-                  {% else %}
-                    <img class="pet-img" src="{% static 'images/default_pet.jpg' %}" alt="default pet pic" />
-                  {% endif %}
-                </a>
-              </div>
-
-              <div>
-                <a href="{% url 'booking_date' pet.id %}" style=" text-decoration: none;">{{ pet.name_pet }}</a>
-              </div>
-              <div>
-                {% if pet.pet_type %}
-                  <p>{{ pet.pet_type }}</p>
-                {% else %}
-                  <p>Không có thông tin</p>
-                {% endif %}
-              </div>
-              <div>
-                {% if pet.age %}
-                  <p>{{ pet.age }}</p>
-                {% else %}
-                  <p>Không có thông tin</p>
-                {% endif %}
-              </div>
-            {% endfor %}
+        {% block title_content %}
+          <div class="title-content-appointment-registration">
+            <p style="align-self: center; justify-self: center;">Ảnh</p>
+            <p style="align-self: center; justify-self: center;">Tên</p>
+            <p style="align-self: center; justify-self: center;">Loại</p>
+            <p style="align-self: center; justify-self: center;">Tuổi</p>
           </div>
-        </div>
+        {% endblock %}
+
+        {% block content %}
+          {% if pets %}
+            <div class="content-content-appointment-registration">
+              {% for pet in pets %}
+                <a href="{% url 'booking_date' pet.id %}" class="item-content-content-appointment-registration">
+                  <div>
+                    {% if pet.images %}
+                      <img class="pet-img" src="{{ pet.images.url }}" alt="pet pic" />
+                    {% else %}
+                      <img class="pet-img" src="{% static 'images/default_pet.jpg' %}" alt="default pet pic" />
+                    {% endif %}
+                  </div>
+
+                  <p style="color: black;">{{ pet.name_pet }}</p>
+
+                  <div>
+                    {% if pet.pet_type %}
+                      <p style="color: black;">{{ pet.pet_type }}</p>
+                    {% else %}
+                      <p style="color: black;">Không có thông tin</p>
+                    {% endif %}
+                  </div>
+                  <div>
+                    {% if pet.age %}
+                      <p style="color: black;">{{ pet.age }}</p>
+                    {% else %}
+                      <p style="color: black;">Không có thông tin</p>
+                    {% endif %}
+                  </div>
+                </a>
+              {% endfor %}
+            </div>
+          {% else %}
+            <h5 style="text-align: center;">Bạn chưa có thú cưng. Hãy đăng ký thú cưng ở nút "Thêm thú cưng" ở góc trái bên trên....</h5>
+          {% endif %}
+        {% endblock %}
       </div>
     </div>
   </div>

@@ -41,47 +41,49 @@
   </div>
   <div style="display: flex; justify-content: center; width: 100%; height: 100vh;">
     <div class="layout-right" style="width: 50%; height: 80%; display: flex; justify-content: center; align-items: center;">
-      <div class="container-profile">
-        <div class="item-images-profile item-profile">
-          {% if customer.images %}
-            <img class="avatar-profile" src="{{ customer.images.url }}" alt="This is profile pic" />
-            <button class="layout-right" id="editBtn-updateImg">Tải ảnh lên</button>
-          {% else %}
-            <img class="avatar-profile" src="{% static 'images/avatar_default.png' %}" alt="This is profile pic" />
-            <button class="layout-right" id="editBtn-updateImg">Tải ảnh lên</button>
-          {% endif %}
-        </div>
-        <div class="item-text1-profile item-text-profile">
-          <p>Tên đăng nhập : {{ customer.name_customer }}</p>
-        </div>
-        <div class="item-text2-profile item-text-profile">
-          <p>Email : {{ customer.email_customer }}</p>
-        </div>
-        <div class="item-text3-profile item-text-profile">
-          <p>
-            Địa chỉ :{% if customer.address %}
-              {{ customer.address }}
+      {% block content_profile %}
+        <div class="container-profile">
+          <div class="item-images-profile item-profile">
+            {% if customer.images %}
+              <img class="avatar-profile" src="{{ customer.images.url }}" alt="This is profile pic" />
+              <button class="layout-right" id="editBtn-updateImg">Tải ảnh lên</button>
             {% else %}
-              <span class="text-muted">Không có thông tin</span>
+              <img class="avatar-profile" src="{% static 'images/avatar_default.png' %}" alt="This is profile pic" />
+              <button class="layout-right" id="editBtn-updateImg">Tải ảnh lên</button>
             {% endif %}
-          </p>
+          </div>
+          <div class="item-text1-profile item-text-profile">
+            <p>Tên đăng nhập : {{ customer.name_customer }}</p>
+          </div>
+          <div class="item-text2-profile item-text-profile">
+            <p>Email : {{ customer.email_customer }}</p>
+          </div>
+          <div class="item-text3-profile item-text-profile">
+            <p>
+              Địa chỉ :{% if customer.address %}
+                {{ customer.address }}
+              {% else %}
+                <span class="text-muted">Không có thông tin</span>
+              {% endif %}
+            </p>
+          </div>
+          <div class="item-text4-profile item-text-profile">
+            <p>
+              Số điện thoại :{% if customer.phone_number_customer %}
+                {{ customer.phone_number_customer }}
+              {% else %}
+                <span class="text-muted">Không có thông tin</span>
+              {% endif %}
+            </p>
+          </div>
+          <div class="item-text5-profile item-text-profile">
+            <p>Số lượng thú cưng : {{ pet_count }}</p>
+          </div>
+          <div class="item-text6-profile item-text-profile">
+            <button class="layout-right" id="editBtn-updateInf">Cập nhật thông tin</button>
+          </div>
         </div>
-        <div class="item-text4-profile item-text-profile">
-          <p>
-            Số điện thoại :{% if customer.phone_number_customer %}
-              {{ customer.phone_number_customer }}
-            {% else %}
-              <span class="text-muted">Không có thông tin</span>
-            {% endif %}
-          </p>
-        </div>
-        <div class="item-text5-profile item-text-profile">
-          <p>Số lượng thú cưng : {{ pet_count }}</p>
-        </div>
-        <div class="item-text6-profile item-text-profile">
-          <button class="layout-right" id="editBtn-updateInf">Cập nhật thông tin</button>
-        </div>
-      </div>
+      {% endblock %}
     </div>
   </div>
   <script src="{% static 'js/updateInf.js' %}"></script>

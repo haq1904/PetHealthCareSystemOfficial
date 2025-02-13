@@ -2,5 +2,54 @@
 {% load static %}
 
 {% block booking %}
-  <div style="width: 100%; height: 100%;"></div>
+  <div style="width: 100%; height: 100%; display: grid; place-content: center;">
+    <div class="layout-booking">
+      <h3 style="place-self: center;">Thông tin lịch khám</h3>
+
+      {% block information %}
+        <div class="info-pet-bill">
+          <div class="item-info-pet-bill">
+            {% if pet.images %}
+              <img class="pet-img" style="width:70px ; height:70px;" src="{{ pet.images.url }}" alt="pet " />
+            {% else %}
+              <img class="pet-img" style="width:70px ; height:70px;" src="{% static 'images/default_pet.jpg' %}" alt="pet pic" />
+            {% endif %}
+          </div>
+          <p class="item-info-pet-bill" style="padding-bottom: 0px;">
+            Ngày đặt lịch khám: <br />{{ formatted_date }} <br />{{ part_vietnamese }}
+          </p>
+          <span class="item-info-pet-bill">Pet : {{ pet.name_pet }} --- ID : {{ pet.id }}</span>
+          <p class="item-info-pet-bill" style="padding-top: 18px;">Chủ của pet : {{ pet.customer.name_customer }}</p>
+          <p class="item-info-pet-bill" style="padding-top: 18px;">
+            Bác sĩ phụ trách : <br />
+            <span>
+              {% if vet %}
+                {{ vet.real_name_veterinarian }} --- ID : {{ vet.id }}
+              {% else %}
+                Chưa cập nhật bác sĩ phụ trách
+              {% endif %}
+            </span>
+          </p>
+          <span class="item-info-pet-bill" style="padding-top: 18px;">Tình trạng : {{ pet.pet_status }}</span>
+        </div>
+      {% endblock %}
+
+      {% block submit %}
+        <form method="POST" id="bookingForm" class="confirm-info-pet-bill">
+          {% csrf_token %}
+          <h3 class="item-info-pet-bill">Phương pháp điều trị</h3>
+          <div class="content-confirm-info-pet-bill">
+            <p class="item-info-pet-bill">Khám bệnh:200.000đ</p>
+            <div class="item-info-pet-bill">{{ formBookingForm.examine }}</div>
+            <p class="item-info-pet-bill">Gửi thú cưng để theo dõi:300.000đ</p>
+            <div class="item-info-pet-bill">{{ formBookingForm.hospitalization }}</div>
+            <p class="item-info-pet-bill">Tim vaccine:500.000đ</p>
+            <div class="item-info-pet-bill">{{ formBookingForm.vaccination }}</div>
+          </div>
+          <button class="item-info-pet-bill" style="border-radius: 78px 78px 78px 78px; background-color: antiquewhite;" type="submit" onclick="return confirmBooking()">Xác nhận đặt lịch</button>
+        </form>
+      {% endblock %}
+    </div>
+  </div>
+  <script src="{% static 'js/booking.js' %}"></script>
 {% endblock %}

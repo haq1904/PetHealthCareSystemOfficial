@@ -1,4 +1,4 @@
-html,
+oplhtml,
 body {
     height: 100%;
     font-family: 'Arial', sans-serif;
@@ -582,7 +582,7 @@ h2 {
     grid-area: title;
     display: grid;
     place-content: center;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 2fr 3fr;
     grid-template-areas:
         "addBtn-appointment-registration title-title-appointment-registration";
 }
@@ -596,17 +596,17 @@ h2 {
     background-color: #75eff5;
     font-size: 22px;
     text-decoration: none;
-    align-content: center;
-    justify-content: center;
     height: fit-content;
     width: fit-content;
-    justify-self: end;
+    place-self: center;
+    margin-left: 160px;
 
 }
 
 .title-title-appointment-registration {
     grid-area: title-title-appointment-registration;
     width: 100%;
+
 }
 
 
@@ -651,9 +651,16 @@ h2 {
 .item-content-content-appointment-registration {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    place-items: center;
-    gap: 20px;
-    height: 60px;
+    justify-items: center;
+    align-items: center;
+    gap: 10px;
+    height: 80px;
+    text-decoration: none !important;
+    border-radius: 100px 100px 100px 100px;
+    -webkit-border-radius: 100px 100px 100px 100px;
+    -moz-border-radius: 100px 100px 100px 100px;
+    background: #09aea5;
+    border: 11px solid rgba(80, 255, 225, 0.5);
 }
 
 .layout-booking-date {
@@ -766,5 +773,111 @@ h2 {
     place-items: center;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
-    height: 60px;
+    height: 80px;
+    text-decoration: none;
+    color: black;
+    border-radius: 100px 100px 100px 100px;
+    -webkit-border-radius: 100px 100px 100px 100px;
+    -moz-border-radius: 100px 100px 100px 100px;
+    background: #09aea5;
+    border: 11px solid rgba(80, 255, 225, 0.5);
+
+
+}
+
+
+.layout-booking {
+    width: 600px;
+    height: 550px;
+    border-radius: 78px 78px 78px 78px;
+    -moz-border-radius: 78px 78px 78px 78px;
+    -webkit-border-radius: 78px 78px 78px 78px;
+    border: 8px inset #cccccc;
+    background-color: #75eff5;
+    display: grid;
+    justify-items: center;
+    grid-template-rows: 1fr 4fr 4fr;
+
+
+}
+
+.info-pet-bill {
+    display: grid;
+    width: 90%;
+    height: 95%;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    border-radius: 59px;
+    background: #00b3b0;
+    box-shadow: 5px 5px 0px #00b1ae,
+        -5px -5px 0px #00b5b2;
+    place-items: center;
+}
+
+
+.item-info-pet-bill {
+    width: fit-content;
+}
+
+.confirm-info-pet-bill {
+    display: grid;
+    grid-template-rows: 1fr 3fr 1fr;
+    place-items: center;
+}
+
+.content-confirm-info-pet-bill {
+    height: 95%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    border-radius: 59px;
+    background: #00b3b0;
+    box-shadow: 5px 5px 0px #00b1ae,
+        -5px -5px 0px #00b5b2;
+    place-items: center;
+}
+
+.content-confirm-review-customer {
+    height: 100px;
+    width: 400px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-radius: 59px;
+    background: #00b3b0;
+    box-shadow: 5px 5px 0px #00b1ae,
+        -5px -5px 0px #00b5b2;
+    place-items: center;
+}
+
+.container-petInf {
+    width: 300px;
+    height: 450px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    place-items: center;
+
+}
+
+.info-container {
+    border-radius: 59px;
+    background: #00b3b0;
+    box-shadow: 5px 5px 0px #00b1ae,
+        -5px -5px 0px #00b5b2;
+}
+
+
+.item-content-content-medical {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+    align-items: center;
+    gap: 10px;
+    height: 80px;
+    text-decoration: none !important;
+    border-radius: 100px 100px 100px 100px;
+    -webkit-border-radius: 100px 100px 100px 100px;
+    -moz-border-radius: 100px 100px 100px 100px;
+    background: #09aea5;
+    border: 11px solid rgba(80, 255, 225, 0.5);
 }

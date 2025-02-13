@@ -1,0 +1,42 @@
+{% extends 'customer/appointment_registration.html' %}
+{% load static %}
+
+{% block title %}
+  <p class="layout-right" style="font-size: 22px; width: fit-content; place-self: center; margin-bottom: 2px;">Chọn thú cưng để đánh giá</p>
+{% endblock %}
+
+{% block content %}
+  {% if pets %}
+    <div class="content-content-appointment-registration">
+      {% for pet in pets %}
+        <a href="{% url 'pick_booking_review' pet.id %}" class="item-content-content-appointment-registration">
+          <div>
+            {% if pet.images %}
+              <img class="pet-img" src="{{ pet.images.url }}" alt="pet pic" />
+            {% else %}
+              <img class="pet-img" src="{% static 'images/default_pet.jpg' %}" alt="default pet pic" />
+            {% endif %}
+          </div>
+
+          <p style="color: black;">{{ pet.name_pet }}</p>
+          <div>
+            {% if pet.pet_type %}
+              <p style="color: black;">{{ pet.pet_type }}</p>
+            {% else %}
+              <p style="color: black;">Không có thông tin</p>
+            {% endif %}
+          </div>
+          <div>
+            {% if pet.age %}
+              <p style="color: black;">{{ pet.age }}</p>
+            {% else %}
+              <p style="color: black;">Không có thông tin</p>
+            {% endif %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <h4 style="width: fit-content; justify-self: center;">Hiện tại bạn chưa có thú cưng. Hãy đăng kí ở mục đăng kí lịch khám nha.</h4>
+  {% endif %}
+{% endblock %}

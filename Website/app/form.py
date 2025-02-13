@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from .models import *
 from django import forms
-from .models import Pet,Booking, FormBooking,Schedule
+from .models import Pet,Booking, FormBooking,Schedule,Review
 class CreateUserForm (UserCreationForm) :
     class Meta():
         model=CustomUser
@@ -56,3 +56,16 @@ class FormBookingForm(forms.ModelForm):
         model = FormBooking
         fields = ['examine', 'hospitalization', 'vaccination']
 
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['form_customer', 'score']  
+        widgets = {
+            'form_customer': forms.Textarea(attrs={'style':' width: 200px; height: 30px; resize: none;','class': 'form-control', 'placeholder': 'Nhập đánh giá của bạn...'}),
+            'score': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 10}),
+        }
+        labels = {
+            'form_customer': 'Đánh giá của bạn',
+            'score': 'Điểm số (0-10)',
+        }

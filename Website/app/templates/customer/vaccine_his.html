@@ -1,0 +1,41 @@
+{% extends 'customer/index.html' %}
+{% load static %}
+
+{% block vaccine_his %}
+  <div class="layout-appointment-registration">
+    <div>
+      <p class="layout-right" style="font-size: 22px; width: fit-content; place-self: center;">Lịch sử tiêm vaccine</p>
+    </div>
+
+    <div class="lay-out-content-appointment-registrantion">
+      <div class="content-apointment-registration">
+        <div class="title-content title-content title-content title-content" style="display: grid; grid-template-columns:repeat(4,1fr);">
+          <p style="align-self: center; justify-self: center;">Ngày tiêm</p>
+          <p style="align-self: center; justify-self: center;">Loại vaccine</p>
+          <p style="align-self: center; justify-self: center;">Liều lượng</p>
+          <p style="align-self: center; justify-self: center;">Lưu ý</p>
+        </div>
+
+        {% if vaccines %}
+          <div class="content-content-appointment-registration">
+            {% for vaccine in vaccines %}
+              <div class="item-content-content-appointment-registration">
+                <p>{{ vaccine.date }}</p>
+                <p>{{ vaccine.vaccine_type }}</p>
+                <p>{{ vaccine.dosage }}</p>
+
+                {% if vaccine.note %}
+                  <p>{{ vaccine.note }}</p>
+                {% else %}
+                  <p>Không có thông tin</p>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <h5 style="text-align: center;">Thú cưng của bạn không có lịch sử tiêm vaccine..</h5>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

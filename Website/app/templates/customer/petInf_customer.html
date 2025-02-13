@@ -1,5 +1,18 @@
-{% extends 'customer/index.html' %}
+{% extends 'customer/profile_customer.html' %}
 {% load static %}
-{% block petIf_customer %}
-  <h1>this is pet information site</h1>
+
+{% block content_profile %}
+  <div class="container-petInf">
+    <img class="pet-img" src="{{ pet.images.url }}" alt="" />
+    <span>Chủ nhân : {{ pet.customer.name_customer }}</span>
+    <span>Tuổi : {{ pet.age }}</span>
+    <span>Loại : {{ pet.pet_type }}</span>
+    <span>Pet : {{ pet.name_pet }}</span>
+    <span>Cân nặng : {{ pet.weight }}</span>
+    <span>Tình trạng : {{ pet.pet_status }}</span>
+    <span>Chủng loại : {{ pet.species }}</span>
+
+    <a href="{% url 'medical_his' pet.id %}" style="text-decoration: none;">Tiền sử bệnh</a>
+    <a href="{% url 'vaccine_his' pet.id %}" style="text-decoration: none;">Lịch sử vaccine</a>
+  </div>
 {% endblock %}

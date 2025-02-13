@@ -1,0 +1,30 @@
+{% extends 'customer/appointment_registration.html' %}
+{% load static %}
+
+{% block title %}
+  <div>
+    <p class="layout-right" style="font-size: 22px; width: fit-content; place-self: center;">Tiền sử bệnh lý</p>
+  </div>
+{% endblock %}
+{% block title_content %}
+  <div class="title-content-appointment-registration" style="display: grid; grid-template-columns: 1fr 1fr;">
+    <p style="align-self: center; justify-self: center;">Ngày bệnh</p>
+    <p style="align-self: center; justify-self: center;">Tên loại bệnh</p>
+  </div>
+{% endblock %}
+
+{% block content %}
+  {% if medicals %}
+    <div class="content-content-appointment-registration">
+      {% for medical in medicals %}
+        <div class="item-content-content-medical">
+          <p>{{ medical.date }}</p>
+
+          <p>{{ medical.disease }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <h5 style="text-align: center;">THú cưng của bạn chưa có tiền sử bệnh lý</h5>
+  {% endif %}
+{% endblock %}

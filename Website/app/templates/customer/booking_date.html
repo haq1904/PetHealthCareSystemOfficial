@@ -6,7 +6,7 @@
     <div class="title-layout-booking-date">
       <div class="right-title-layout-booking-date">
         <p class="layout-right" style="width: fit-content; margin-bottom: 0px;margin-top: 5px;;height: 35px;">Chọn ngày khám</p>
-        <form method="POST" style="height: 10px;">
+        <form id="bookingForm" method="POST" style="height: 10px;">
           {% csrf_token %}
 
           <input type="date" id="appointment_date" name="date" value="{{ date|default:'' }}" required />
@@ -15,7 +15,7 @@
         </form>
       </div>
       <p class="mid-title-layout-booking-date">Danh sách bác sĩ có lịch trống</p>
-      <a href="{% url 'booking' pet_id=pet_id date=date %}" class="left-title-layout-booking-date">Bỏ qua</a>
+      <a href="{% url 'booking' pet_id=pet_id date=date %}" onclick="return handleSkip('{{ date|default:'' }}')" class="left-title-layout-booking-date">Bỏ qua</a>
     </div>
     <div class="content-layout-booking-date">
       <div class="title-content-layout-booking-date">
@@ -56,11 +56,17 @@
           <h3 style="justify-self: center;">Không có bác sĩ làm việc vào ngày này.</h3>
         {% endif %}
       </div>
-      {% comment %} <div style="width: 90%;">
-        <p>Ngày hẹn: {{ date|date:'d/m/Y' }} .Ngày này sẽ là ngày đặt lich khám nếu bạn không chọn bác sĩ. Chúng tôi sẽ sắp xếp bác sĩ cho thú cưng của bạn</p>
-      </div> {% endcomment %}
     </div>
   </div>
+  <script>
+    function handleSkip(date) {
+      console.log(date)
+      if (!date || date === 'None' || date === '') {
+        alert('Bạn cần xác nhận ngày khám trước!')
+        return false
+      }
+    }
+  </script>
   <script src="{% static 'js/booking_date.js' %}"></script>
 {% endblock %}
 <a href="{% url 'booking' %}?idpet={{ idpet }}&idvet={{ idvet }}&part={{ part }}&date={{ date }}"></a>

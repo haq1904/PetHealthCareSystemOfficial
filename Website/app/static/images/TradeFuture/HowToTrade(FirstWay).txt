@@ -1,0 +1,40 @@
+*Các bước phân tích cơ bản : 
+
+1 - Xem xét đà giá.
+
+2 - Xét vùng kháng cự và vùng hỗ trợ.
+	
+	+Vùng kháng cự và vùng hỗ trợ ít nhất phải được test giá một lần 
+	nếu muốn vào lệnh.
+
+3 - Xem xét các bộ nến đảo chiều : 
+
+	+Nến Doji(có khả năng hay xuât hiện ở các trường hợp đảo chiều).
+	+Nến Engulfing(hay xuất hiện ở các trường hợp  tăng giá mạnh).
+	+Nến rút râu(có Khả năng đảo chiều).
+
+4 - Các mô hình :
+
+	+ Mô hình hai đỉnh (hai đỉnh gần bằng nhau )  : Sẽ có một đường NeckLine(đường đi qua đáy thấp nhất giữa hai đỉnh) .Nếu đã hình thành được mô hình hai đỉnh và giá đã phá qua đường NeckLine thì có thể xem xét thêm các yếu tố khác để vào lênh.
+
+	
+	+ Mô hình vai đầu vai(Hai tương đối cân bằng ) : đường NeckLine được  hình thành từ hai đáy thấp nhất trong mô hình.Cách vào lệnh cũng tương đối như mô hình hai đỉnh.
+
+	
+	+ Mô hình Quasimodo(giống như mô hình vai đầu vai nhưng có sự 	chênh lệch nhỏ giữa hai vai ) : đường NeckLine được hình thành như ở mô hình vai đầu vai.Cách vào lệnh cũng tương đối như mô hình hai đỉnh .
+
+
+5 - Xem xét đến giá và các indicator: 
+	
+	+Nếu giá và RSI  tại thời điểm nào đó không đi 
+	chung với nhau thì ở đây có tín hiệu có khả năng đảo chiều .
+
+	+Cách dùng EMA :
+		
+		_Khuyên dùng ở khung M15.
+		_Có tính hiệu Buy or Sell thì vào lệnh.
+		_Chỉ nên vào lệnh khi tín hiệu xuất hiện ở lượt 1 và 2.
+		_Phải kết hợp với các yếu tố đã nêu trên để vào lệnh.
+		_Khi bắt đầu xuất hiện tín hiệu Buy lần đầu tiên sau khi hết tín hiếu Sell hoặc ngược lại thì ta gọi đó là lượt tín hiệu đầu tiên.
+
+	

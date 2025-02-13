@@ -1,6 +1,20 @@
 {% extends 'customer/index.html' %}
 {% load static %}
 {% block home_customer %}
+  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-success" id="modalLabel">Thông báo</h5>
+        </div>
+        <div class="modal-body">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
   <div style=" 
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -26,7 +40,7 @@
         </div>
       </div>
       <div class="layout">
-        <a href="{% url 'rating' %}"><img style="width: 200px; height: auto;" src="{% static 'images/rating.png' %}" alt="This is rating pic" /></a>
+        <a href="{% url 'pick_pet_review' %}"><img style="width: 200px; height: auto;" src="{% static 'images/rating.png' %}" alt="This is rating pic" /></a>
         <p class="layout-text">Đánh giá</p>
       </div>
     </div>
@@ -42,42 +56,55 @@
           <p>Tuổi</p>
         </div>
         <div id="content-showpet-home-customer">
-          <div id="item-content-showpet-home-customer">
+          {% if pets %}
             {% for pet in pets %}
-              <img class="pet-img"
-                src="{% if pet.images %}
-                  {{ pet.images.url }}
-                {% else %}
-                  {% static 'images/default_pet.jpg' %}
-                {% endif %}" />
+              <a href="{% url 'petInf_customer' pet.id %}" id="item-content-showpet-home-customer" style="margin-bottom: 10px;">
+                <img class="pet-img"
+                  src="{% if pet.images %}
+                    {{ pet.images.url }}
+                  {% else %}
+                    {% static 'images/default_pet.jpg' %}
+                  {% endif %}" />
 
-              <div>
-                {% if pet.name_pet %}
-                  {{ pet.name_pet }}
-                {% else %}
-                  Hong có thông tin
-                {% endif %}
-              </div>
+                <div>
+                  {% if pet.name_pet %}
+                    {{ pet.name_pet }}
+                  {% else %}
+                    Hong có thông tin
+                  {% endif %}
+                </div>
 
-              <div>
-                {% if pet.species %}
-                  {{ pet.species }}
-                {% else %}
-                  Hong có thông tin
-                {% endif %}
-              </div>
+                <div>
+                  {% if pet.species %}
+                    {{ pet.species }}
+                  {% else %}
+                    Hong có thông tin
+                  {% endif %}
+                </div>
 
-              <div>
-                {% if pet.age %}
-                  {{ pet.age }}
-                {% else %}
-                  Hong có thông tin
-                {% endif %}
-              </div>
+                <div>
+                  {% if pet.age %}
+                    {{ pet.age }}
+                  {% else %}
+                    Hong có thông tin
+                  {% endif %}
+                </div>
+              </a>
             {% endfor %}
-          </div>
+          {% else %}
+            <h4 style="width: fit-content; justify-self: center">Bạn chưa có thú cưng. Vào đăng kí nhanh nào!</h4>
+          {% endif %}
         </div>
       </div>
     </div>
   </div>
+  {% if messages %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var modal = new bootstrap.Modal(document.getElementById('successModal'))
+        modal.show()
+        setTimeout(() => modal.hide(), 5000) // Tự động ẩn sau 2 giây
+      })
+    </script>
+  {% endif %}
 {% endblock %}
