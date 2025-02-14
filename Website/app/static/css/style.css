@@ -850,7 +850,7 @@ h2 {
 }
 
 .container-petInf {
-    width: 300px;
+    width: 600px;
     height: 450px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);

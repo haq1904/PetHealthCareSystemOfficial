@@ -17,7 +17,7 @@
   {% if medicals %}
     <div class="content-content-appointment-registration">
       {% for medical in medicals %}
-        <div class="item-content-content-medical">
+        <div class="item-content-content-medical" style="margin-bottom: 10px;">
           <p>{{ medical.date }}</p>
 
           <p>{{ medical.disease }}</p>
@@ -25,6 +25,6 @@
       {% endfor %}
     </div>
   {% else %}
-    <h5 style="text-align: center;">THú cưng của bạn chưa có tiền sử bệnh lý</h5>
+    <h5 style="text-align: center;">Thú cưng của bạn chưa có tiền sử bệnh lý</h5>
   {% endif %}
 {% endblock %}
