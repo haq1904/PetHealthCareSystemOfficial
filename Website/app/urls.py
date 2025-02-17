@@ -3,10 +3,12 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    #For customer
     path('',views.loginPage,name='login'),
     path('register/',views.register,name='register'),
     path('logout/',views.logoutPage,name='logout'),
     path('home_customer/',views.home_customer,name='home_customer'),
+    path('store_pet/',views.store_pet,name='store_pet'),
     path('profile_customer/',views.profile_customer,name='profile_customer'),
     path('appointment_registration/',views.appointment_registration,name='appointment_registration'),
     path('update_customer_info/',views.update_customer_info,name='update_customer_info'),
@@ -24,7 +26,14 @@ urlpatterns = [
     path('petInf_customer/<int:pet_id>/', views.petInf_customer, name='petInf_customer'),
     path('medical_his/<int:pet_id>/', views.medical_his, name='medical_his'),
     path('vaccine_his/<int:pet_id>/', views.vaccine_his, name='vaccine_his'),
-    path('home_staff/', views.home_staff, name='home_staff'),
+    path('store_petInf_customer/<int:pet_id>/',views.store_petInf_customer,name='store_petInf_customer'),
+    path('list_hos/<int:pet_id>/',views.list_hos,name='list_hos'),
+    path('update_status_pet/<int:hos_id>/',views.update_status_pet,name='update_status_pet'),
+
+
+    #for staff
+
+    path('home_staff',views.home_staff,name='home_staff'),
     
 
 

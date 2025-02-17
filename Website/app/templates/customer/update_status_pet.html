@@ -1,0 +1,23 @@
+{% extends 'customer/index.html' %}
+{% load static %}
+
+{% block update_status_pet %}
+  <div class="container-updateStatus">
+    <div class="title-updateStatus">
+      <p>Bảng cập nhật thông tin sức khỏe</p>
+    </div>
+    <div class="body-updateStatus">
+      {% if updateStatus %}
+        {% for status in updateStatus %}
+          <div class="cartInformation">
+            <h3>{{ status.date|date:'d-m-Y' }}</h3>
+            <img class="layout-right" style="width: 200px; height: 180px;" src="{{ status.image.url }}" alt="status" />
+            <p>{{ status.description }}</p>
+          </div>
+        {% endfor %}
+      {% else %}
+        <h3 class="layout-right" style="height: fit-content;">🐶 Hiện tại chưa có thông tin cập nhật về hồ sơ này 🐱</h3>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

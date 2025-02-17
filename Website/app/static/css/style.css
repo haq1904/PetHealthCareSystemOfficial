@@ -358,8 +358,8 @@ h2 {
 
 .modal-updateInf {
     position: fixed;
-    top: 50%;
-    left: 50%;
+    top: 55%;
+    left: 55%;
     transform: translate(-50%, -50%);
     padding: 20px;
     border-radius: 10px;
@@ -378,10 +378,11 @@ h2 {
     display: grid;
     width: 90%;
     height: 100%;
-    grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: 1fr 5fr 1fr;
+    grid-template-rows: repeat(5, 1fr);
     grid-template-areas:
         "close title title"
+        "close email email"
         "close address address"
         "close phone phone"
         "close save save "
@@ -397,11 +398,14 @@ h2 {
     font-size: 24px;
 }
 
+.modal-email-item-updateInf {
+    grid-area: email;
+}
+
+
 .modal-address-item-updateInf {
     grid-area: address;
-    display: grid;
-    grid-template-rows: 1f 1f;
-    grid-template-columns: 1fr;
+
 
 }
 
@@ -661,6 +665,7 @@ h2 {
     -moz-border-radius: 100px 100px 100px 100px;
     background: #09aea5;
     border: 11px solid rgba(80, 255, 225, 0.5);
+    margin-bottom: 10px;
 }
 
 .layout-booking-date {
@@ -754,16 +759,18 @@ h2 {
 }
 
 #title-showpet-home-customer {
-    width: 100%;
+    width: 96%;
     height: 50px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     place-items: center;
+    place-self: center;
+    margin-right: 20pxw;
 }
 
 #content-showpet-home-customer {
     width: 100%;
-    height: 400px;
+    height: 380px;
     display: block;
     overflow-y: auto;
 }
@@ -771,8 +778,10 @@ h2 {
 #item-content-showpet-home-customer {
     display: grid;
     place-items: center;
+    place-self: center;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
+    width: 96%;
     height: 80px;
     text-decoration: none;
     color: black;
@@ -782,6 +791,16 @@ h2 {
     background: #09aea5;
     border: 11px solid rgba(80, 255, 225, 0.5);
 
+
+}
+
+.footer-show-pet-home-customer {
+    width: 95%;
+    height: 30px;
+    margin-left: 20px;
+    align-content: center;
+    text-align: end;
+    margin-top: 10px;
 
 }
 
@@ -807,10 +826,11 @@ h2 {
     height: 95%;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(3, 1fr);
-    border-radius: 59px;
-    background: #00b3b0;
-    box-shadow: 5px 5px 0px #00b1ae,
-        -5px -5px 0px #00b5b2;
+    grid-template-columns: repeat(2, 1fr);
+    border-radius: 91px 91px 91px 91px;
+    -webkit-border-radius: 91px 91px 91px 91px;
+    -moz-border-radius: 91px 91px 91px 91px;
+    background: #0ecfc2;
     place-items: center;
 }
 
@@ -839,22 +859,22 @@ h2 {
 
 .content-confirm-review-customer {
     height: 100px;
-    width: 400px;
+    width: 500px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    border-radius: 59px;
-    background: #00b3b0;
-    box-shadow: 5px 5px 0px #00b1ae,
-        -5px -5px 0px #00b5b2;
+    border-radius: 91px 91px 91px 91px;
+    -webkit-border-radius: 91px 91px 91px 91px;
+    -moz-border-radius: 91px 91px 91px 91px;
+    background: #0ecfc2;
     place-items: center;
 }
 
 .container-petInf {
-    width: 600px;
-    height: 450px;
+    width: 750px;
+    height: 350px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     place-items: center;
 
 }
@@ -880,4 +900,53 @@ h2 {
     -moz-border-radius: 100px 100px 100px 100px;
     background: #09aea5;
     border: 11px solid rgba(80, 255, 225, 0.5);
+}
+
+.container-updateStatus {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 1fr 8fr;
+}
+
+.title-updateStatus {
+    border-radius: 78px 78px 78px 78px;
+    -moz-border-radius: 78px 78px 78px 78px;
+    -webkit-border-radius: 78px 78px 78px 78px;
+    border: 8px inset #cccccc;
+    background-color: #75eff5;
+    width: 320px;
+    height: 52px;
+    justify-self: center;
+    font-size: 18px;
+    align-content: center;
+    justify-items: center;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.body-updateStatus {
+    width: 1400px;
+    height: 500px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    place-self: center;
+    justify-content: center;
+    overflow-y: auto;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.cartInformation {
+    width: 420px;
+    height: 350px;
+    border-radius: 78px 78px 78px 78px;
+    -moz-border-radius: 78px 78px 78px 78px;
+    -webkit-border-radius: 78px 78px 78px 78px;
+    border: 8px inset #cccccc;
+    background-color: #75eff5;
+    display: grid;
+    grid-template-rows: 1fr 3fr 2fr;
+    place-items: center;
 }

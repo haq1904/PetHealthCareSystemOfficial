@@ -42,13 +42,13 @@ class CustomUserAdmin(UserAdmin):
             elif obj.role == 'user':
                 Customer.objects.create(user=obj, name_customer=obj.username)
 
-        logger.debug(f"User role: {obj.role}")
         if obj.role == 'user':
             try:
                 customer = Customer.objects.get(user=obj)
                 customer.name_customer = obj.username  
                 customer.phone_number_customer = obj.phone_number  
                 customer.address = obj.address  
+                customer.email_customer=obj.email
                 customer.save()
             except Customer.DoesNotExist:
                 Customer.objects.create(user=obj, name_customer=obj.username) 
@@ -97,13 +97,11 @@ class PetAdmin(admin.ModelAdmin):
 class ScheduleAdmin(admin.ModelAdmin):
     list_display = ('veterinarian', 'date', 'morning', 'afternoon', 'night')
 
-    def save_model(self, request, obj, form, change):
-        # Xóa lịch cũ nếu đã tồn tại lịch trùng
-        Schedule.objects.filter(veterinarian=obj.veterinarian, date=obj.date).exclude(id=obj.id).delete()
-        
-        # Lưu lịch mới
-        super().save_model(request, obj, form, change)
 
+
+
+class BookingAdmin(admin.ModelAdmin):
+    list_display = ('id', 'staff', 'veterinarian', 'pet',  'booking_date')
 
 #  **Đăng ký CustomUserAdmin vào Django Admin**
 admin.site.register(CustomUser, CustomUserAdmin)
@@ -117,7 +115,7 @@ admin.site.register(VaccinationHistory)
 admin.site.register(Cage)
 admin.site.register(Hospitalization)
 admin.site.register(Schedule,ScheduleAdmin)
-admin.site.register(Booking)
+admin.site.register(Booking,BookingAdmin)
 admin.site.register(Cost)
 admin.site.register(FormBooking)
 admin.site.register(BookingStatus)
@@ -125,3 +123,4 @@ admin.site.register(Review)
 admin.site.register(CageType)
 admin.site.register(CageStatus)
 admin.site.register(AppointmentDate)
+admin.site.register(UpdateStatus)

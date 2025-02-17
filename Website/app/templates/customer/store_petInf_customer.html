@@ -1,0 +1,14 @@
+{% extends 'customer/petInf_customer.html' %}
+{% load static %}
+
+{% block end_content %}
+  <a style="width: 200px;
+    border-radius: 20px;
+    background: #00bfff;
+    box-shadow:  5px 5px 8px #00a4db,
+             -5px -5px 8px #00daff;
+    text-decoration: none;
+    color: black;
+    font-size: 15px;
+  " href="{% url 'list_hos' pet.id %}" style="text-decoration: none;">Thông tin sức khỏe thú cưng được cập nhật tại đây</a>
+{% endblock %}

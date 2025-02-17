@@ -44,60 +44,72 @@
         <p class="layout-text">Đánh giá</p>
       </div>
     </div>
-    <div style="width: 100%;">
-      <div style="width: 100% ;height: 10%; ">
-        <p class="layout-right" style="font-size: 24px;  width: fit-content; place-self: center;">Danh sách thú cưng</p>
-      </div>
-      <div class="layout-right" style="width: 90%; height: 85%; margin-left: 50px;">
-        <div id="title-showpet-home-customer">
-          <p>Ảnh</p>
-          <p>Tên</p>
-          <p>Chủng loại</p>
-          <p>Tuổi</p>
+
+    {% block content %}
+      <div style="width: 100%;">
+        <div style="width: 100% ;height: 10%; ">
+          <p class="layout-right" style="font-size: 24px;  width: fit-content; place-self: center;">Danh sách thú cưng</p>
         </div>
-        <div id="content-showpet-home-customer">
-          {% if pets %}
-            {% for pet in pets %}
-              <a href="{% url 'petInf_customer' pet.id %}" id="item-content-showpet-home-customer" style="margin-bottom: 10px;">
-                <img class="pet-img"
-                  src="{% if pet.images %}
-                    {{ pet.images.url }}
-                  {% else %}
-                    {% static 'images/default_pet.jpg' %}
-                  {% endif %}" />
+        <div class="layout-right" style="width: 90%; height: 85%; margin-left: 50px;">
+          <div id="title-showpet-home-customer">
+            <p>Ảnh</p>
+            <p>Tên</p>
+            <p>Chủng loại</p>
+            <p>Tuổi</p>
+          </div>
+          <div id="content-showpet-home-customer">
+            {% if pets %}
+              {% for pet in pets %}
+                <a href="{% url 'petInf_customer' pet.id %}" id="item-content-showpet-home-customer" style="margin-bottom: 10px;">
+                  <img class="pet-img"
+                    src="{% if pet.images %}
+                      {{ pet.images.url }}
+                    {% else %}
+                      {% static 'images/default_pet.jpg' %}
+                    {% endif %}" />
 
-                <div>
-                  {% if pet.name_pet %}
-                    {{ pet.name_pet }}
-                  {% else %}
-                    Hong có thông tin
-                  {% endif %}
-                </div>
+                  <div>
+                    {% if pet.name_pet %}
+                      {{ pet.name_pet }}
+                    {% else %}
+                      Không có thông tin
+                    {% endif %}
+                  </div>
 
-                <div>
-                  {% if pet.species %}
-                    {{ pet.species }}
-                  {% else %}
-                    Hong có thông tin
-                  {% endif %}
-                </div>
+                  <div>
+                    {% if pet.species %}
+                      {{ pet.species }}
+                    {% else %}
+                      Không có thông tin
+                    {% endif %}
+                  </div>
 
-                <div>
-                  {% if pet.age %}
-                    {{ pet.age }}
-                  {% else %}
-                    Hong có thông tin
-                  {% endif %}
-                </div>
-              </a>
-            {% endfor %}
-          {% else %}
-            <h4 style="width: fit-content; justify-self: center">Bạn chưa có thú cưng. Vào đăng kí nhanh nào!</h4>
-          {% endif %}
+                  <div>
+                    {% if pet.age %}
+                      {{ pet.age }}
+                    {% else %}
+                      Không có thông tin
+                    {% endif %}
+                  </div>
+                </a>
+              {% endfor %}
+            {% else %}
+              <h4 style="width: fit-content; justify-self: center">Bạn chưa có thú cưng. Vào đăng kí nhanh nào!</h4>
+            {% endif %}
+          </div>
+          <div class="footer-show-pet-home-customer">
+            <a style="color: black; 
+          text-decoration: none;
+          border-radius: 20px;
+          background: #00bfff;
+          box-shadow: 5px 5px 8px #00a4db,
+         -5px -5px 8px #00daff;" href="{% url 'store_pet' %}">🏡Danh sách lưu chuồng tại đây</a>
+          </div>
         </div>
       </div>
-    </div>
+    {% endblock %}
   </div>
+
   {% if messages %}
     <script>
       document.addEventListener('DOMContentLoaded', function () {

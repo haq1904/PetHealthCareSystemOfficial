@@ -8,6 +8,7 @@ const closeBtn = document.querySelector(".close-updateInf");
 const saveButton = document.getElementById("saveBtn-updateInf");
 const addressInput = document.getElementById("address");
 const phoneInput = document.getElementById("phone");
+const emailInput = document.getElementById("email");
 
 
 btn.onclick = function () {
@@ -41,15 +42,24 @@ saveButton.addEventListener("click", function () {
     } else {
         phoneInput.setCustomValidity("");
     }
+    if (emailInput.value.trim() === "") {
+        emailInput.setCustomValidity("Vui lòng nhập email !");
+        emailInput.reportValidity();
+        return;
+    } else {
+        emailInput.setCustomValidity("");
+    }
 
 
     const addressValue = addressInput.value.trim();
     const phoneValue = phoneInput.value.trim();
+    const emailValue = emailInput.value.trim();
     const csrfToken = document.getElementById('csrfToken-inf').value;
 
     const updatedData = {
         address: addressValue,
         phone: phoneValue,
+        email: emailValue
     };
 
     const url = "/update_customer_info/";

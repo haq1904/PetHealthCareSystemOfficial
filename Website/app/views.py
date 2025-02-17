@@ -11,8 +11,12 @@ import os
 from django.utils.text import slugify
 from .form import PetForm,BookingForm
 from datetime import datetime
+from django.conf import settings
 
 # Create your views here.
+
+
+#for customer
 def register(request):
     form = CreateUserForm()
     if request.method == "POST" :
@@ -48,7 +52,6 @@ def loginPage(request):
         user=authenticate(request,username=username,password=password)
         if user is not None:
             login(request, user)
-            # Sau khi login, kiểm tra vai trò của user để redirect đúng trang
             if user.role == "user":
                 return redirect('home_customer')
             elif user.role == "staff":
@@ -80,12 +83,17 @@ def update_customer_info(request):
         data = json.loads(request.body)
         address = data.get('address')
         phone = data.get('phone')
+        email = data.get('email')
         customer = Customer.objects.get(user=request.user)
         customer.address = address
         request.user.address = address
         customer.phone_number_customer = phone
         request.user.phone_number = phone
+        customer.email_customer=email
+        print( customer.email_customer)
+        request.user.email=email
         customer.save()
+        request.user.save()
         return JsonResponse({'message': 'Cập nhật thành công!'}, status=200)
     return JsonResponse({'message': 'Phương thức không hợp lệ!'}, status=405)
 
@@ -209,16 +217,19 @@ def booking(request, pet_id, date):
                 schedule.night=False
             schedule.save()
             appointment.save()
-        booking.save()
+        
         cost=Cost.objects.create(booking=booking)
         cost.save()
 
         if formBooking.examine :
-            Examine.objects.create(booking=booking)
+            Examine.objects.create(pet=pet)
         if formBooking.hospitalization :
-            Hospitalization.objects.create(booking=booking)
+            Hospitalization.objects.create(pet=pet)
+            booking.store_pet=True
         if formBooking.vaccination :
             VaccinationHistory.objects.create(pet=pet)
+        
+        booking.save()
         
         messages.success(request, "Bạn đã đặt lịch cho thú cưng thành công! Sẽ có nhân viên liên hệ để bạn thanh toán trực tuyến hoặc bạn có thể thanh toán trực tiếp tại hệ thống của chúng tôi. Xin cảm ơn quý khách!")
         return redirect("home_customer") 
@@ -375,6 +386,12 @@ def review(request,booking_id):
 
 def petInf_customer(request,pet_id):
     pet=Pet.objects.get(id=pet_id)
+    booking=Booking.objects.filter(pet=pet)
+    
+    if request.method=="POST":
+        messages.success(request, f"Để xóa hồ sơ thú cưng, vui lòng liên hệ nhân viên để được hỗ trợ.!") 
+        return redirect('home_customer')
+        
     return render(request,"customer/petInf_customer.html",{"pet":pet})
 
 def  vaccine_his(request,pet_id):
@@ -385,6 +402,30 @@ def  medical_his(request,pet_id):
     medicals=MedicalHistory.objects.filter(pet=Pet.objects.get(id=pet_id))
     return render(request,"customer/medical_his.html",{'medicals':medicals})
 
+def store_pet(request):
+    pets=Pet.objects.filter(customer=Customer.objects.get(user=request.user))
+    bookings = Booking.objects.filter(store_pet=True)
+    return render(request,'customer/store_pet.html',{'bookings':bookings,'pets':pets})
+
+def store_petInf_customer(request,pet_id):
+    pet = Pet.objects.get(id=pet_id)
+    return render(request,"customer/store_petInf_customer.html",{"pet":pet})
+
+def list_hos(request,pet_id):
+    pet=Pet.objects.get(id=pet_id)
+    hos=Hospitalization.objects.filter(pet=pet)
+    return render(request,"customer/list_hos.html",{'hoss':hos})
+
+def update_status_pet(request,hos_id):
+    hos=Hospitalization.objects.get(id=hos_id)
+    updateStatus = UpdateStatus.objects.filter(hospitalization=hos)
+    return render(request,"customer/update_status_pet.html",{"updateStatus": updateStatus})
+
+
+
+
+
+#for staff
 
 def home_staff(request):
     return render(request,"staff/home_staff.html")

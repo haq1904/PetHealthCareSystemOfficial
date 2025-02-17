@@ -152,11 +152,11 @@ class VaccinationHistory(models.Model):
         return f"Vaccination for {self.pet.name_pet} on {self.date}"
     
 class Cage(models.Model):
-    cage = models.AutoField(primary_key=True)
-    capacity = models.IntegerField(null=True,blank=True)
+    capacity = models.IntegerField(null=True,blank=True,validators=[MinValueValidator(1), MaxValueValidator(5)])
+    
 
     def __str__(self):
-        return f"Cage {self.id} with Capacity {self.capacity}"
+        return f"Cage {self.id} with capacity {self.capacity}"
     
 
     
@@ -182,7 +182,6 @@ class Booking(models.Model):
     staff = models.ForeignKey(Staff, on_delete=models.SET_NULL, null=True,blank=True)
     veterinarian = models.ForeignKey(Veterinarian, on_delete=models.SET_NULL, null=True,blank=True)
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE, null=True,blank=True)
-    cage = models.ForeignKey(Cage,on_delete=models.SET_NULL, null=True,blank=True)
     cancel_date = models.DateTimeField(null=True, blank=True)
     refund_fee = models.DecimalField(max_digits=10, decimal_places=2,default=0, null=True, blank=True)
     booking_date = models.DateTimeField(auto_now_add=True)
@@ -195,7 +194,7 @@ class Booking(models.Model):
     
     
 class Examine(models.Model):
-    booking = models.OneToOneField(Booking, on_delete=models.CASCADE,primary_key=True)
+    pet=models.ForeignKey(Pet,on_delete=models.CASCADE)
     diagnosis = models.TextField(null=True,blank=True)
     symptom = models.TextField(null=True,blank=True)
     start_date = models.DateField(null=True,blank=True)
@@ -204,17 +203,24 @@ class Examine(models.Model):
     result = models.TextField(null=True,blank=True)
 
     def __str__(self):
-        return f"Examine for Pet {self.booking.pet.name_pet}"
+        return f"Examine for Pet {self.pet.name_pet}"
     
 class Hospitalization(models.Model):
-    booking = models.OneToOneField(Booking, on_delete=models.CASCADE,primary_key=True)
+    pet=models.ForeignKey(Pet,on_delete=models.CASCADE)
+    cage=models.ForeignKey(Cage,on_delete=models.SET_NULL,null=True,blank=True)
     start_date = models.DateField(null=True,blank=True)
     end_date = models.DateField(null=True, blank=True)
     symptom = models.TextField(null=True,blank=True)
-    image = models.ImageField(upload_to='images/', null=True, blank=True)
+    def __str__(self):
+        return f"Hospitalization for Pet {self.pet.name_pet} "
+    
+class UpdateStatus(models.Model):
+    hospitalization=models.ForeignKey(Hospitalization,on_delete=models.CASCADE)
+    date=models.DateField(null=True,blank=False)
+    image = models.ImageField(upload_to='images/hospitalization/', null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     def __str__(self):
-        return f"Hospitalization for Pet {self.booking.pet.name_pet} in Cage {self.booking.cage.id}"
+        return f"Update status for pet {self.hospitalization.pet.name_pet}"
 
 
 class AppointmentDate(models.Model):
@@ -285,7 +291,7 @@ class Review(models.Model):
     booking = models.OneToOneField(Booking, on_delete=models.CASCADE, primary_key=True) 
     form_customer = models.TextField(null=True,blank=True)
     time = models.DateTimeField(auto_now_add=True)
-    score = models.IntegerField(null=True,blank=True,validators=[MinValueValidator(0), MaxValueValidator(10)])
+    score = models.IntegerField(null=True,blank=True,validators=[MinValueValidator(0), MaxValueValidator(5)])
 
     def __str__(self):
        local_time = timezone.localtime(self.time)  

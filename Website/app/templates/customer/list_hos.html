@@ -1,0 +1,52 @@
+{% extends 'customer/pick_pet_review.html' %}
+{% load static %}
+
+{% block title %}
+  <p class="layout-right" style="font-size: 22px; width: fit-content; place-self: center; margin-bottom: 2px;  padding-top: 5px;">Chọn hồ sơ</p>
+{% endblock %}
+
+{% block title_content %}
+  <div class="title-content-appointment-registration">
+    <p style="align-self: center; justify-self: center;">Ngày nhập chuồng</p>
+    <p style="align-self: center; justify-self: center;">Ngày ra chuồng</p>
+    <p style="align-self: center; justify-self: center;">Mã chuồng</p>
+    <p style="align-self: center; justify-self: center;">Triệu chứng ban đầu</p>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="content-content-appointment-registration">
+    {% for hos in hoss %}
+      <a href="{% url 'update_status_pet' hos.id %}" class="item-content-content-appointment-registration">
+        <p style="color: black;">
+          {% if hos.start_date %}
+            {{ hos.start_date|date:'d-m-Y' }}
+          {% else %}
+            Chưa cập nhật
+          {% endif %}
+
+        <p style="color: black;">
+          {% if hos.end_date %}
+            {{ hos.end_date|date:'d-m-Y' }}
+          {% else %}
+            Chưa cập nhật
+          {% endif %}
+        </p>
+        <p style="color: black;">
+          {% if hos.cage %}
+            {{ hos.cage.id }}
+          {% else %}
+            Chưa cập nhật
+          {% endif %}
+        </p>
+        <p style="color: black;">
+          {% if hos.symptom %}
+            {{ hos.symptom }}
+          {% else %}
+            Chưa cập nhật
+          {% endif %}
+        </p>
+      </a>
+    {% endfor %}
+  </div>
+{% endblock %}

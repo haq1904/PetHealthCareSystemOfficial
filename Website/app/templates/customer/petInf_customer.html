@@ -3,16 +3,49 @@
 
 {% block content_profile %}
   <div class="container-petInf">
-    <img class="pet-img" src="{{ pet.images.url }}" alt="" />
+    <img class="pet-img" style="width: 60px; height:auto;" src="{{ pet.images.url }}" alt="" />
+
     <span>Chủ nhân : {{ pet.customer.name_customer }}</span>
-    <span>Tuổi : {{ pet.age }}</span>
-    <span>Loại : {{ pet.pet_type }}</span>
+    <span>
+      Tuổi :{% if pet.age %}
+        {{ pet.age }}
+      {% else %}
+        Không có thông tin
+      {% endif %}
+    </span>
+    <span>
+      Loại :{% if pet.pet_type %}
+        {{ pet.pet_type }}
+      {% else %}
+        Không có thông tin
+      {% endif %}
+    </span>
     <span>Pet : {{ pet.name_pet }}</span>
     <span>Cân nặng : {{ pet.weight }}</span>
     <span>Tình trạng : {{ pet.pet_status }}</span>
-    <span>Chủng loại : {{ pet.species }}</span>
-
-    <a href="{% url 'medical_his' pet.id %}" style="text-decoration: none;">Tiền sử bệnh</a>
-    <a href="{% url 'vaccine_his' pet.id %}" style="text-decoration: none;">Lịch sử vaccine</a>
+    <span>
+      Chủng loại :{% if pet.species %}
+        {{ pet.species }}
+      {% else %}
+        Không có thông tin
+      {% endif %}
+    </span>
+  </div>
+  <div>
+    {% block end_content %}
+      <div style="display: grid; grid-template-columns: repeat(2,1fr); width: 750px; place-items: center;">
+        <a href="{% url 'medical_his' pet.id %}" style="text-decoration: none;">Tiền sử bệnh</a>
+        <a href="{% url 'vaccine_his' pet.id %}" style="text-decoration: none;">Lịch sử vaccine</a>
+      </div>
+      <form method="POST" style="text-align:  end; margin-right: 40px; margin-top: 30px;">
+        {% csrf_token %}
+        <button style="
+        border-radius: 138px 138px 138px 138px;
+        -webkit-border-radius: 138px 138px 138px 138px;
+        -moz-border-radius: 138px 138px 138px 138px;
+        background: #711616;
+        border: 5px solid #ff2000;" type="submit">Xóa thú cưng</button>
+      </form>
+    {% endblock %}
   </div>
 {% endblock %}

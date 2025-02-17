@@ -63,9 +63,28 @@ class ReviewForm(forms.ModelForm):
         fields = ['form_customer', 'score']  
         widgets = {
             'form_customer': forms.Textarea(attrs={'style':' width: 200px; height: 30px; resize: none;','class': 'form-control', 'placeholder': 'Nhập đánh giá của bạn...'}),
-            'score': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 10}),
+            'score': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 5}),
         }
         labels = {
             'form_customer': 'Đánh giá của bạn',
-            'score': 'Điểm số (0-10)',
+            'score': 'Điểm số (0-5)',
         }
+
+
+class UpdateStatusForm(forms.ModelForm):
+    class Meta:
+        model = UpdateStatus
+        fields = ['date', 'image', 'description']
+
+    def clean_date(self):
+        date = self.cleaned_data.get('date')
+        hospitalization = self.cleaned_data.get('hospitalization')
+
+        if hospitalization:
+            start_date = hospitalization.start_date
+            end_date = hospitalization.end_date
+
+            if start_date and end_date and not (start_date <= date <= end_date):
+                raise forms.ValidationError("📅 Ngày cập nhật phải nằm trong khoảng thời gian nhập viện.")
+
+        return date

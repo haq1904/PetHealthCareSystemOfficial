@@ -1,3 +1,5 @@
+
+
 document.getElementById('btn-uploadImg').addEventListener('click', function () {
     var input = document.getElementById('imageUpload');
     var csrfToken = document.getElementById('csrfToken-img').value;
