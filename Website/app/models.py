@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
+from django.db.models import Count
 
 class UserRole(models.TextChoices):
     USER = 'user', 'User'
@@ -86,9 +87,10 @@ class CustomUser(AbstractUser):
 class Staff(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name_staff = models.CharField(max_length=100)
-    real_name_Staff=models.CharField(max_length=100,blank=True,null=True)
-    phone_number_staff = models.CharField(max_length=15,null=True,blank=True)
+    real_name_Staff=models.CharField(max_length=100,blank=False,null=True)
+    phone_number_staff = models.CharField(max_length=15,null=True,blank=False)
     email_staff = models.EmailField(null=True,blank=True)
+    images = models.ImageField(upload_to='images/staff/', null=True, blank=True)
 
     def __str__(self):
         return self.name_staff
@@ -111,6 +113,7 @@ class Veterinarian(models.Model):
     phone_number_veterinarian = models.CharField(max_length=15,null=True,blank=True)
     specialization = models.CharField(max_length=100,null=True,blank=True)
     email_vet = models.EmailField(null=True,blank=True)
+    images = models.ImageField(upload_to='images/veterinarian/', null=True, blank=True)
 
     def __str__(self):
         return self.name_veterinarian
@@ -153,10 +156,12 @@ class VaccinationHistory(models.Model):
     
 class Cage(models.Model):
     capacity = models.IntegerField(null=True,blank=True,validators=[MinValueValidator(1), MaxValueValidator(5)])
+
+    
+    def __str__(self):
+            return f"Cage {self.id} with capacity {self.capacity}"
     
 
-    def __str__(self):
-        return f"Cage {self.id} with capacity {self.capacity}"
     
 
     
@@ -187,6 +192,26 @@ class Booking(models.Model):
     booking_date = models.DateTimeField(auto_now_add=True)
     store_pet = models.BooleanField(default=False)
 
+    def calculate_refund(self):
+        """Tính số tiền hoàn lại dựa trên thời gian hủy."""
+        appointment_date = AppointmentDate.objects.get(hospitalization=self)
+        if not self.cancel_date or not appointment_date :
+            return 0
+        
+        days_before_booking = (appointment_date - self.cancel_date).days
+
+        if days_before_booking >= 7:
+            return self.prepayment_amount  
+        elif 3 <= days_before_booking <= 6:
+            return self.prepayment_amount * 0.75  
+        else:
+            return 0  
+
+    def process_refund(self):
+        """Cập nhật phí hoàn tiền khi hủy."""
+        self.refund_fee = self.calculate_refund()
+        self.save()
+    
     def __str__(self):
         return f"Booking {self.id}"
     
@@ -299,24 +324,8 @@ class Review(models.Model):
     
 
 
-class CageType(models.Model):
-    cage = models.OneToOneField(Cage, on_delete=models.CASCADE, primary_key=True)
-    isolation = models.BooleanField(default=False)
-    recovery = models.BooleanField(default=False)
-    long_term = models.BooleanField(default=False)
-    short_term = models.BooleanField(default=False)
 
-    def __str__(self):
-        return f"Cage Type for Cage {self.cage.id}"
 
-class CageStatus(models.Model):
-    cage = models.OneToOneField(Cage, on_delete=models.CASCADE, primary_key=True)
-    vacant = models.BooleanField(default=True)
-    in_use = models.BooleanField(default=False)
-    dirty = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"Status for Cage {self.cage.id}"
     
 
 

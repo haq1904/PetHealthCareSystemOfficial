@@ -1,0 +1,229 @@
+{% extends 'staff/index.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <style>
+    .container {
+      width: 100%;
+      height: 800px;
+      display: grid;
+      grid-template-rows: 1fr 8fr;
+      place-items: center;
+    }
+    
+    .title {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+    }
+    
+    .body {
+      width: 80%;
+      height: 98%;
+      -moz-border-radius: 0px 0px 78px 78px;
+      -webkit-border-radius: 0px 0px 78px 78px;
+      border-radius: 0px 0px 78px 78px;
+      border: 8px inset #cccccc;
+      background-color: #75eff5;
+      display: grid;
+      grid-template-rows: 1fr 5fr;
+    }
+    
+    .title-body {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      border-bottom: 8px inset #cccccc;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .item_title_body {
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      align-content: center;
+      text-decoration: none;
+      color: black;
+    }
+    
+    .content_body {
+      height: 425px;
+      width: 100%;
+      display: block;
+      overflow: auto;
+      scrollbar-width: none;
+    }
+    
+    .item_content_body {
+      width: 70%;
+      height: 35%;
+      border-radius: 122px 122px 122px 122px;
+      -webkit-border-radius: 122px 122px 122px 122px;
+      -moz-border-radius: 122px 122px 122px 122px;
+      background: #5bedf3;
+      border: 5px ridge #000000;
+      place-self: center;
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      place-items: center;
+      text-decoration: none;
+      color: #000000;
+    }
+    
+    .text_title {
+      border-radius: 122px 122px 122px 122px;
+      -webkit-border-radius: 122px 122px 122px 122px;
+      -moz-border-radius: 122px 122px 122px 122px;
+      background: #00bbff;
+      border: 11px ridge #000000;
+      width: fit-content;
+      place-self: center;
+      font-size: 20px;
+    }
+    
+    .vacant_text_body {
+      border-radius: 122px 122px 122px 122px;
+      -webkit-border-radius: 122px 122px 122px 122px;
+      -moz-border-radius: 122px 122px 122px 122px;
+      background: #00ca71;
+    }
+    
+    .empty_text_body {
+      border-radius: 122px 122px 122px 122px;
+      -webkit-border-radius: 122px 122px 122px 122px;
+      -moz-border-radius: 122px 122px 122px 122px;
+      background: #6c7404;
+    }
+    
+    .full_text_body {
+      border-radius: 122px 122px 122px 122px;
+      -webkit-border-radius: 122px 122px 122px 122px;
+      -moz-border-radius: 122px 122px 122px 122px;
+      background: #ca4e00;
+    }
+    
+    .list_cage {
+      width: 80%;
+      align-self: end;
+      text-align: end;
+      padding-right: 285px;
+    }
+  </style>
+{% endblock %}
+
+{% block show_cage %}
+  {% block add %}
+    {% comment %}message{% endcomment %}
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-success" id="modalLabel">Thông báo</h5>
+          </div>
+          <div class="modal-body">
+            {% for message in messages %}
+              <p>{{ message }}</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% comment %}message{% endcomment %}
+
+    {% comment %}modal{% endcomment %}
+    <div id="editModal-updateInf" class="modal-updateInf" style="height: 200px;">
+      <form class="modal-nd-updateInf" method="POST">
+        {% csrf_token %}
+        <div class="modal-close-item-updateInf">
+          <span class="close-updateInf">&times;</span>
+        </div>
+        <div style="color: black;" class="modal-title-item-updateInf">Cập nhật thông tin</div>
+        <div class="modal-email-item-updateInf">
+          <label style="color: black;" for="capacity">Số slot :</label>
+          {{ form.capacity }}
+        </div>
+
+        <div class="modal-save-item-updateInf">
+          <button type="submit" onclick=" return confirmAdd()">Lưu thay đổi</button>
+        </div>
+      </form>
+    </div>
+    {% comment %}modal{% endcomment %}
+  {% endblock %}
+
+  {% block container %}
+    <div class="container">
+      <div class="title">
+        <div class="list_cage">
+          <span style="-moz-border-radius: 78px 78px 78px 78px;
+      -webkit-border-radius: 78px 78px 78px 78px;
+      border-radius: 78px 78px 78px 78px;
+      border: 8px inset #cccccc;
+      background-color: #75eff5;
+      font-size: 25px;">Danh sách chuồng</span>
+        </div>
+        {% block action %}
+          <button style="border-radius: 135px 135px 135px 135px;
+          -webkit-border-radius: 135px 135px 135px 135px;
+          -moz-border-radius: 135px 135px 135px 135px;
+          background:rgb(0, 208, 153);
+          border: 3px solid #000000;" type="button" id="editBtn-updateInf">Thêm chuồng</button>
+        {% endblock %}
+      </div>
+      <div class="body">
+        {% block title_body %}
+          <div class="title-body">
+            <a class="item_title_body" style="border-right:  8px inset #cccccc;" href="{% url 'in_use_cage' %}"><p class="text_title">Đang sử dụng</p></a>
+            <a class="item_title_body" style="border-left:  8px inset #cccccc;" href="{% url 'vacant_cage' %}"><p style="font-size: 20px;">Còn trống</p></a>
+          </div>
+        {% endblock %}
+        {% block item_cage %}
+          <div class="content_body">
+            {% for cage in cages %}
+              <a href="{% url 'petInf_store' cage.id %}" class="item_content_body">
+                <img style="width: 100px; height: auto;" src="{% static 'images/cage.png' %}" alt="cage" />
+                <span>Số lượng : {{ cage.hos_count }} / {{ cage.capacity }}</span>
+                <span>Mã chuồng : {{ cage.id }}</span>
+
+                <div>
+                  {% if cage.hos_count < cage.capacity %}
+                    <span class="vacant_text_body">Còn trống</span>
+                  {% else %}
+                    <span class="full_text_body">Đã đầy</span>
+                  {% endif %}
+                </div>
+              </a>
+            {% endfor %}
+          </div>
+        {% endblock %}
+      </div>
+    </div>
+  {% endblock %}
+
+  <script>
+    const modal = document.getElementById('editModal-updateInf')
+    const btn = document.getElementById('editBtn-updateInf')
+    const closeBtn = document.querySelector('.close-updateInf')
+    
+    btn.onclick = function () {
+      modal.style.display = 'flex'
+    }
+    
+    closeBtn.onclick = function () {
+      modal.style.display = 'none'
+    }
+    function confirmAdd() {
+      return alert('Xác nhận thêm chuồng! ')
+    }
+  </script>
+  {% if messages %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var modal = new bootstrap.Modal(document.getElementById('successModal'))
+        modal.show()
+        setTimeout(() => modal.hide(), 2000)
+      })
+    </script>
+  {% endif %}
+{% endblock %}

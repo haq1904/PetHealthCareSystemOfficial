@@ -1,0 +1,122 @@
+{% extends 'staff/index.html' %}
+
+{% block extra_css %}
+  <style>
+    .container {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-rows: 1fr 8fr;
+      place-items: center;
+    }
+    
+    .title {
+      -moz-border-radius: 78px 78px 78px 78px;
+      -webkit-border-radius: 78px 78px 78px 78px;
+      border-radius: 78px 78px 78px 78px;
+      border: 8px inset #cccccc;
+      background-color: #75eff5;
+      width: fit-content;
+      font-size: 24px;
+    }
+    .body {
+      width: 70%;
+      height: 490px;
+      -moz-border-radius: 78px 78px 78px 78px;
+      -webkit-border-radius: 78px 78px 78px 78px;
+      border-radius: 78px 78px 78px 78px;
+      border: 8px inset #cccccc;
+      background-color: #75eff5;
+      display: grid;
+      grid-template-rows: 1fr 7fr;
+    }
+    
+    .title_body {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      border-bottom: 8px inset #cccccc;
+      place-items: center;
+    }
+    
+    .content_body {
+      height: 415px;
+      width: 100%;
+      overflow: auto;
+      scrollbar-width: none;
+      border-radius: 0px 0px 78px 78px;
+      -webkit-border-radius: 0px 0px 78px 78px;
+      -moz-border-radius: 0px 0px 78px 78px;
+    }
+    
+    .item_content {
+      border-radius: 135px 135px 135px 135px;
+      -webkit-border-radius: 135px 135px 135px 135px;
+      -moz-border-radius: 135px 135px 135px 135px;
+      background: #00b3c3;
+      border: 3px solid #000000;
+      height: 25%;
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      place-items: center;
+    }
+  </style>
+{% endblock %}
+
+{% block addPet_store %}
+  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-success" id="modalLabel">Thông báo</h5>
+        </div>
+        <div class="modal-body">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="title">Hồ sơ lưu chuồng</div>
+    <div class="body">
+      <div class="title_body">
+        <span>Mã hồ sơ</span>
+        <span>Hình ảnh</span>
+        <span>Pet</span>
+        <span>Mã thú cưng</span>
+        <span>Tên chủ nhân</span>
+        <span>------------</span>
+      </div>
+      <div class="content_body">
+        {% for hos in hoss %}
+          <form method="POST" class="item_content">
+            {% csrf_token %}
+            <span>{{ hos.id }}</span>
+            <img style="width: 60px; height: auto;" src="{{ hos.pet.images.url }}" alt="pet" />
+            <span>{{ hos.pet.name_pet }}</span>
+            <span>{{ hos.pet.id }}</span>
+            <span>{{ hos.pet.customer.name_customer }}</span>
+            <input type="hidden" name="hos_id" value="{{ hos.id }}" />
+            <button onclick="return confirmAdd()">Thêm</button>
+          </form>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <script>
+    function confirmAdd() {
+      return alert('Xác nhận thêm thú cưng vào chuồng!')
+    }
+  </script>
+  {% if messages %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var modal = new bootstrap.Modal(document.getElementById('successModal'))
+        modal.show()
+        setTimeout(() => modal.hide(), 2000)
+      })
+    </script>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'customer/profile_customer.html' %}
+{% load static %}
+
+{% block homeButton %}
+  <a href="{% url 'home_staff' %}"><img style="width: 60px; height:auto;" src="{% static 'images/home.png' %}" alt="home button" /></a>
+{% endblock %}
+
+{% block modal %}
+  <div id="editModal-updateInf" class="modal-updateInf" style="height: 350px;">
+    <form class="modal-nd-updateInf" method="POST">
+      {% csrf_token %}
+      <div class="modal-close-item-updateInf">
+        <span class="close-updateInf">&times;</span>
+      </div>
+      <div style="color: black;" class="modal-title-item-updateInf">Cập nhật thông tin</div>
+      <div class="modal-email-item-updateInf">
+        <label style="color: black;" for="real_name">Họ và tên :</label>
+        {{ form.real_name_Staff }}
+      </div>
+      <div class="modal-address-item-updateInf">
+        <label style="color: black;" for="email">Email:</label>
+        {{ form.email_staff }}
+      </div>
+
+      <div class="modal-phone-item-updateInf">
+        <label style="color: black;" for="phone">Số điện thoại :</label>
+        {{ form.phone_number_staff }}
+      </div>
+
+      <div class="modal-save-item-updateInf">
+        <button type="submit" onclick=" return confirmChange()">Lưu thay đổi</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}
+
+{% block content_profile %}
+  <div class="container-profile">
+    <div class="item-images-profile item-profile">
+      {% if staff.images %}
+        <img class="avatar-profile" src="{{ staff.images.url }}" alt="This is profile pic" />
+        <button class="layout-right" id="editBtn-updateImg">Tải ảnh lên</button>
+      {% else %}
+        <img class="avatar-profile" src="{% static 'images/avatar_default.png' %}" alt="This is profile pic" />
+        <button class="layout-right" id="editBtn-updateImg">Tải ảnh lên</button>
+      {% endif %}
+    </div>
+    <div class="item-text1-profile item-text-profile">
+      <p>Tên đăng nhập : {{ staff.name_staff }}</p>
+    </div>
+    <div class="item-text2-profile item-text-profile">
+      Họ và tên :{% if staff.real_name_Staff %}
+        <p>{{ staff.real_name_Staff }}</p>
+      {% else %}
+        <span class="text-muted">Không có thông tin</span>
+      {% endif %}
+    </div>
+    <div class="item-text3-profile item-text-profile">
+      <p>ID :{{ staff.id }}</p>
+    </div>
+    <div class="item-text4-profile item-text-profile">
+      <p>
+        Số điện thoại :{% if staff.phone_number_staff %}
+          {{ staff.phone_number_staff }}
+        {% else %}
+          <span class="text-muted">Không có thông tin</span>
+        {% endif %}
+      </p>
+    </div>
+    <div class="item-text5-profile item-text-profile">
+      <p>
+        Email :{% if staff.email_staff %}
+          {{ staff.email_staff }}
+        {% else %}
+          <span class="text-muted">Không có thông tin</span>
+        {% endif %}
+      </p>
+    </div>
+    <div class="item-text6-profile item-text-profile">
+      <button class="layout-right" id="editBtn-updateInf">Cập nhật thông tin</button>
+    </div>
+  </div>
+
+  <script>
+    function confirmChange() {
+      return confirm('Xác nhận thay đổi thông tin !')
+    }
+  </script>
+{% endblock %}

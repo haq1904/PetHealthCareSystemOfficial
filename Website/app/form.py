@@ -1,7 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from .models import *
 from django import forms
-from .models import Pet,Booking, FormBooking,Schedule,Review
 class CreateUserForm (UserCreationForm) :
     class Meta():
         model=CustomUser
@@ -88,3 +87,25 @@ class UpdateStatusForm(forms.ModelForm):
                 raise forms.ValidationError("📅 Ngày cập nhật phải nằm trong khoảng thời gian nhập viện.")
 
         return date
+    
+
+
+
+
+class StaffForm(forms.ModelForm):
+    class Meta:
+        model = Staff
+        fields = [ 'real_name_Staff', 'phone_number_staff', 'email_staff']
+        widgets = {
+            'real_name_Staff': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tên thật'}),
+            'phone_number_staff': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Số điện thoại'}),
+            'email_staff': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+        }
+
+class Cageform(forms.ModelForm):
+    class Meta:
+        model = Cage
+        fields = ['capacity']
+        widgets={
+            'capacity': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 5,'placeholder': 'Slot '}),
+        }

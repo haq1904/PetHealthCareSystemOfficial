@@ -1,0 +1,39 @@
+{% extends 'staff/in_use_cage.html' %}
+{% load static %}
+
+{% block action %}
+  <div style="border-radius: 135px 135px 135px 135px;
+-webkit-border-radius: 135px 135px 135px 135px;
+-moz-border-radius: 135px 135px 135px 135px;
+background: #c3000c;
+border: 3px solid #000000;
+padding-left: 10px;
+place-content: center;
+width: 114.64px;
+height: 37.5px;">
+    <a href="{% url 'delete_cage' %}" style="text-decoration: none; color: #000000;">Xóa chuồng</a>
+  </div>
+{% endblock %}
+{% block title_body %}
+  <div class="title-body">
+    <a class="item_title_body" style="border-right:  8px inset #cccccc;" href="{% url 'in_use_cage' %}"><p style="font-size: 20px;">Đang sử dụng</p></a>
+    <a class="item_title_body" style="border-left:  8px inset #cccccc;" href="{% url 'vacant_cage' %}"><p class="text_title">Còn trống</p></a>
+  </div>
+{% endblock %}
+
+{% block item_cage %}
+  <div class="content_body">
+    {% if cages %}
+      {% for cage in cages %}
+        <a href="{% url 'petInf_store' cage.id %}" class="item_content_body">
+          <img style="width: 100px; height: auto;" src="{% static 'images/cage.png' %}" alt="cage" />
+          <span>Số lượng : {{ cage.hos_count }} / {{ cage.capacity }}</span>
+          <span>Mã chuồng : {{ cage.id }}</span>
+          <span class="empty_text_body">Chưa có thú cưng</span>
+        </a>
+      {% endfor %}
+    {% else %}
+      <h4 class="text_title" style="margin-top: 20px; ">Không có chuồng nào trống hiện tại.</h4>
+    {% endif %}
+  </div>
+{% endblock %}

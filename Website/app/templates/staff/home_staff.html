@@ -1,5 +1,161 @@
-{% extends 'customer/index.html' %}
+{% extends 'staff/index.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <style>
+    .container {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 4fr 3fr;
+    }
+    
+    .right_container {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      place-items: center;
+    }
+    
+    .item_rigth_container {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .img {
+      width: 200px;
+      height: 200px;
+    }
+    
+    .text {
+      border-radius: 119px 119px 119px 119px;
+      -webkit-border-radius: 119px 119px 119px 119px;
+      -moz-border-radius: 119px 119px 119px 119px;
+      border: 6px outset #000000;
+      background: #1598ba;
+    }
+    
+    .left_container {
+      display: grid;
+      grid-template-rows: 1fr 8fr;
+      place-items: center;
+    }
+    
+    .content_left {
+      width: 100%;
+      height: 98%;
+      border-radius: 119px 119px 119px 119px;
+      -webkit-border-radius: 119px 119px 119px 119px;
+      -moz-border-radius: 119px 119px 119px 119px;
+      border: 6px;
+    }
+    .item_left {
+      width: 90%;
+      height: 35%;
+      border-radius: 119px 119px 119px 119px;
+      -webkit-border-radius: 119px 119px 119px 119px;
+      -moz-border-radius: 119px 119px 119px 119px;
+      border: 6px outset #000000;
+    
+      place-self: center;
+      background: #1598ba;
+      margin-top: 20px;
+    }
+    
+    .content_item {
+      width: 90%;
+      height: 90%;
+      display: grid;
+      place-self: center;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      grid-template-areas:
+        'id id time time score'
+        'review review review review score'
+        'review review review review score';
+    }
+    
+    .id {
+      grid-area: id;
+      place-self: center;
+    }
+    .time {
+      grid-area: time;
+      place-self: center;
+    }
+    .review {
+      grid-area: review;
+      padding-left: 10px;
+      display: grid;
+      grid-template-rows: 1fr 2fr;
+    }
+    .score {
+      grid-area: score;
+      place-self: center;
+      border-radius: 119px 119px 119px 119px;
+      -webkit-border-radius: 119px 119px 119px 119px;
+      -moz-border-radius: 119px 119px 119px 119px;
+      background: #00dcff;
+      border: 6px outset #000000;
+    }
+    
+    .review-content {
+      display: block;
+      overflow-y: auto;
+      height: 40px;
+      border-radius: 0px 0px 19px 20px;
+      -webkit-border-radius: 0px 0px 19px 20px;
+      -moz-border-radius: 0px 0px 19px 20px;
+      border: 6px none #000000;
+      padding-bottom: 90px;
+    }
+  </style>
+{% endblock %}
 
 {% block home_staff %}
-
+  <div class="container">
+    <div class="right_container">
+      <div class="item_rigth_container">
+        <a href="{% url 'profile_staff' %}"><img class="img" src="{% static 'images/profile.png' %}" alt="profile" /></a>
+        <span class="text">Thông tin</span>
+      </div>
+      <div class="item_rigth_container">
+        <a href="{% url 'in_use_cage' %}"><img class="img" src="{% static 'images/cage.png' %}" alt="profile" /></a>
+        <span class="text">Chuồng</span>
+      </div>
+      <div class="item_rigth_container">
+        <a href="{% url 'awaiting_booking' %}"><img class="img" src="{% static 'images/booking.png' %}" alt="profile" /></a>
+        <span class="text">Lịch khám</span>
+      </div>
+      <div class="item_rigth_container">
+        <a href=""><img class="img" src="{% static 'images/pets.png' %}" alt="profile" /></a>
+        <span class="text">Thú cưng</span>
+      </div>
+    </div>
+    <div class="left_container">
+      <span class="text" style="font-size: 20px;">Đánh giá từ khách hàng</span>
+      <div class="content_left">
+        {% if reviews %}
+          {% for review in reviews %}
+            <div class="item_left">
+              <div class="content_item">
+                <span class="id">Mã lịch khám: {{ review.booking.id }}</span>
+                <span class="time">{{ review.time|date:'H:i d-m-Y ' }}</span>
+                <span class="review">
+                  <span>Nhận xét của khách hàng:</span>
+                  <div class="review-content">{{ review.form_customer }}</div>
+                </span>
+                <span class="score">Điểm: {{ review.score }}/5</span>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <h4 class="text" style="place-self: center; margin-top: 40px;">Chưa có đánh giá từ khách hàng</h4>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 {% endblock %}

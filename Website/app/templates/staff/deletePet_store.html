@@ -1,0 +1,27 @@
+{% extends 'staff/petInf_store.html' %}
+{% load static %}
+
+{% block content_Inf %}
+  <div class="content_cageInf">
+    <span>Mã chuồng: {{ cage.id }}</span>
+    <span>Số lượng: {{ cage.hos_count }} / {{ cage.capacity }}</span>
+  </div>
+{% endblock %}
+
+{% block item_list %}
+  <form method="POST" class="item_list_pet">
+    {% csrf_token %}
+    <img class="image_pet" src="{{ hos.pet.images.url }}" alt="" />
+    <span class="text">Pet : {{ hos.pet.name_pet }}</span>
+    <span class="text">Mã thú cưng : {{ hos.pet.id }}</span>
+    <span class="text">Chủ nhân : {{ hos.pet.customer.name_customer }}</span>
+    <input type="hidden" name="hos_id" value="{{ hos.id }}" />
+    <button onclick="return confirmDeletePet()">Xóa</button>
+  </form>
+
+  <script>
+    function confirmDeletePet() {
+      return alert('Xác nhận xóa thú cưng ở chuồng này.')
+    }
+  </script>
+{% endblock %}

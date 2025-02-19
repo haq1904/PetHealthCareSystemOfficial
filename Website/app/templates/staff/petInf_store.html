@@ -1,0 +1,141 @@
+{% extends 'staff/index.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <style>
+    .image_pet {
+      width: 60px;
+      height: 60px;
+      border-radius: 200px 200px 200px 200px;
+      -webkit-border-radius: 200px 200px 200px 200px;
+      -moz-border-radius: 200px 200px 200px 200px;
+      border: 3px solid #000000;
+    }
+    .container {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      place-items: center;
+    }
+    
+    .cageInf {
+      width: 90%;
+      height: 70%;
+      -moz-border-radius: 78px 78px 78px 78px;
+      -webkit-border-radius: 78px 78px 78px 78px;
+      border-radius: 78px 78px 78px 78px;
+      border: 8px inset #cccccc;
+      background-color: #75eff5;
+      display: grid;
+      grid-template-rows: 3fr 1fr;
+      place-items: center;
+    }
+    
+    .content_cageInf {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      place-items: center;
+    }
+    
+    .list_pet {
+      width: 90%;
+      height: 90%;
+      -moz-border-radius: 78px 78px 78px 78px;
+      -webkit-border-radius: 78px 78px 78px 78px;
+      border-radius: 78px 78px 78px 78px;
+      border: 8px inset #cccccc;
+      background-color: #75eff5;
+      margin-left: 100px;
+      padding-top: 17px;
+    }
+    
+    .item_list_pet {
+      height: 90px;
+      width: 98%;
+      border-radius: 135px 135px 135px 135px;
+      -webkit-border-radius: 135px 135px 135px 135px;
+      -moz-border-radius: 135px 135px 135px 135px;
+      background: #00b3c3;
+      border: 3px solid #000000;
+      place-self: center;
+      margin-bottom: 10px;
+      display: grid;
+      place-items: center;
+      grid-template-columns: 1fr 2fr 3fr 3fr 3fr;
+    }
+    
+    .symptom {
+      width: 150px;
+      height: 40px;
+      overflow: auto;
+      scrollbar-width: none;
+    }
+    
+    .text {
+      text-align: center;
+    }
+    
+    .deleteBtn {
+      border-radius: 135px 135px 135px 135px;
+      -webkit-border-radius: 135px 135px 135px 135px;
+      -moz-border-radius: 135px 135px 135px 135px;
+      background: #c3000c;
+      border: 3px solid #000000;
+      padding-left: 10px;
+      place-content: center;
+      text-decoration: none;
+      color: black;
+      text-align: center;
+    }
+    .addBtn {
+      border-radius: 135px 135px 135px 135px;
+      -webkit-border-radius: 135px 135px 135px 135px;
+      -moz-border-radius: 135px 135px 135px 135px;
+      background: rgb(0, 208, 153);
+      border: 3px solid #000000;
+      text-decoration: none;
+      color: black;
+    }
+  </style>
+{% endblock %}
+
+{% block petInf_store %}
+  <div class="container">
+    <div class="cageInf">
+      <img style="width: 50%; height: auto;" src="{% static 'images/cage.png' %}" alt="" />
+      {% block content_Inf %}
+        <div class="content_cageInf">
+          <span>Mã chuồng: {{ cage.id }}</span>
+          <span>Số lượng: {{ cage.hos_count }} / {{ cage.capacity }}</span>
+          <a class="addBtn" href="{% url 'addPet_store' cage.id %}">Thêm thú cưng</a>
+          <a class="deleteBtn" href="{% url 'deletePet_store' cage.id %}">Xóa thú cưng</a>
+        </div>
+      {% endblock %}
+    </div>
+    <div class="list_pet">
+      {% if hoss %}
+        {% for hos in hoss %}
+          {% block item_list %}
+            <div class="item_list_pet">
+              <img class="image_pet" src="{{ hos.pet.images.url }}" alt="" />
+              <span class="text">Pet : {{ hos.pet.name_pet }}</span>
+              <span class="text">Mã thú cưng : {{ hos.pet.id }}</span>
+              <span class="text">Chủ nhân : {{ hos.pet.customer.name_customer }}</span>
+              <div style="font-size: 15px;">
+                Triệu chứng ban đầu :<div class="symptom">
+                  <span>{{ hos.symptom }}</span>
+                </div>
+              </div>
+            </div>
+          {% endblock %}
+        {% endfor %}
+      {% else %}
+        <h4 class="addBtn" style="place-self: center;">Hiện tại chuồng chưa có thú cưng</h4>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

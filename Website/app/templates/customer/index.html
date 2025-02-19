@@ -20,7 +20,10 @@
           <div style="display: flex; gap: 10px; width: 50%; 
                     {% if request.path == '/home_customer/' %}visibility: hidden;{% endif %}">
             <a href="javascript:window.history.back()"><img style="width: 60px; height:auto; margin-left: 10px; " src="{% static 'images/back.png' %}" alt="back button" /></a>
-            <a href="{% url 'home_customer' %}"><img style="width: 60px; height:auto;" src="{% static 'images/home.png' %}" alt="home button" /></a>
+
+            {% block homeButton %}
+              <a href="{% url 'home_customer' %}"><img style="width: 60px; height:auto;" src="{% static 'images/home.png' %}" alt="home button" /></a>
+            {% endblock %}
           </div>
           <div style="width: 50%; display: flex; justify-content: flex-end;">
             <a href="{% url 'logout' %}" onclick="return confirmLogout();"><img src="{% static 'images/log-out.png' %}" style="width: 60px; height: auto; margin-right: 10px;" alt="log out pic" /></a>

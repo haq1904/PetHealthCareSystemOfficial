@@ -34,6 +34,22 @@ urlpatterns = [
     #for staff
 
     path('home_staff',views.home_staff,name='home_staff'),
+    path('home_staff/profile_staff/',views.profile_staff,name='profile_staff'),
+    path('home_staff/in_use_cage/',views.in_use_cage,name='in_use_cage'),
+    path('home_staff/vacant_cage/',views.vacant_cage,name='vacant_cage'),
+    path('home_staff/vacant_cage/delete_cage/',views.delete_cage,name='delete_cage'),
+    path('home_staff/in_use_cage/petInf_store/<int:cage_id>/',views.petInf_store,name='petInf_store'),
+    path('home_staff/in_use_cage/petInf_store/<int:cage_id>/deletePet_store/',views.deletePet_store,name='deletePet_store'),
+    path('home_staff/in_use_cage/petInf_store/<int:cage_id>/addPet_store/',views.addPet_store,name='addPet_store'),
+    path('home_staff/awaiting_booking/',views.awaiting_booking,name='awaiting_booking'),
+    path('home_staff/confirm_booking/',views.confirm_booking,name='confirm_booking'),
+    path('home_staff/success_booking/',views.success_booking,name='success_booking'),
+    path('home_staff/cancel_booking/',views.cancel_booking,name='cancel_booking'),
+    path('home_staff/bookingInf_staff/<int:booking_id>/',views.bookingInf_staff,name='bookingInf_staff'),
+
+
+
+    
     
 
 

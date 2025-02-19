@@ -9,9 +9,9 @@
       <div class="info-pet-bill">
         <div class="item-info-pet-bill">
           {% if booking.pet.images %}
-            <img class="pet-img" style="width:70px ; height:70px;" src="{{ booking.pet.images.url }}" alt="pet " />
+            <img class="pet-img" style="width:50px ; height:50px;" src="{{ booking.pet.images.url }}" alt="pet " />
           {% else %}
-            <img class="pet-img" style="width:70px ; height:70px;" src="{% static 'images/default_pet.jpg' %}" alt="pet pic" />
+            <img class="pet-img" style="width:50px ; height:50px;" src="{% static 'images/default_pet.jpg' %}" alt="pet pic" />
           {% endif %}
         </div>
         <p class="item-info-pet-bill" style="padding-bottom: 0px;">
@@ -30,6 +30,24 @@
           </span>
         </p>
         <span class="item-info-pet-bill" style="padding-top: 18px;">Tình trạng : {{ booking.pet.pet_status }}</span>
+        {% if booking.cost.extra_service %}
+          <span class="item-info-pet-bill">
+            Dịch vụ phát sinh : <br />
+            <div style=" display:block ;
+            overflow:auto; 
+            scrollbar-width: none ; 
+            width: 100px; height: 40px; 
+            padding-bottom: 10px;
+            margin-left: 10px; margin-bottom: 5px;">{{ booking.cost.extra_service }}</div>
+          </span>
+        {% else %}
+          <span>Dịch vụ phát sinh : <br />Không có thông tin</span>
+        {% endif %}
+        <div>
+          <span class="item-info-pet-bill">Phí dịch vụ cơ bản : {{ booking.cost.service_fee }}</span>
+          <br />
+          <span class="item-info-pet-bill">Phí phát sinh : {{ booking.cost.extra_fee }}</span>
+        </div>
       </div>
 
       <form method="POST" id="bookingForm" class="confirm-info-pet-bill">

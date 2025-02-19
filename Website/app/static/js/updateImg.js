@@ -10,28 +10,15 @@ closeBtn_img.onclick = function () {
     modal_img.style.display = "none";
 }
 
-let btn_updateImg = null;
-let url = '';
 
 const btnCustomer = document.querySelector(".btn-save-Customer");
-const btnPet = document.querySelector("btn-save-Pet");
-console.log("btnCustomer:", btnCustomer);
-console.log("btnPet:", btnPet);
 
 
-if (btnCustomer) {
-    btnCustomer.addEventListener("click", function () {
-        btn_updateImg = btnCustomer;
-        url = "/update_customer_image/";
-    })
-}
 
-if (btnPet) {
-    btnPet.addEventListener("click", function () {
-        btn_updateImg = btnPet;
-        url = "/update_pet_image/";
-    });
-}
+btn_updateImg = btnCustomer;
+url = "/update_customer_image/";
+
+
 
 
 

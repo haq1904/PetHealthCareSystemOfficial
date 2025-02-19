@@ -1,0 +1,11 @@
+{% extends 'staff/awaiting_booking.html' %}
+{% load static %}
+
+{% block title_body %}
+  <div class="title_body">
+    <a class="item_title_body" href="{% url 'awaiting_booking' %}"><p>Đang chờ</p></a>
+    <a class="item_title_body" href="{% url 'confirm_booking' %}"><p>Đã xác nhận</p></a>
+    <a class="item_title_body" href="{% url 'success_booking' %}"><p>Thành công</p></a>
+    <a class="item_title_body" href="{% url 'cancel_booking' %}"><p class="text_title">Hủy</p></a>
+  </div>
+{% endblock %}

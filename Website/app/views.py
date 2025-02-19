@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import get_object_or_404, render,redirect
 from django.http import JsonResponse
 from .models import *
 import json
@@ -127,25 +127,37 @@ def pet_registration_image(request):
 
 def update_customer_image(request):
     if request.method == "POST":
+        
         try:
             image = request.FILES.get("image")
             if not image:
                 return JsonResponse({"error": "Bạn chưa chọn ảnh!"}, status=400)
+            
+            if request.user.role == "user":
+                
+                currentUser = Customer.objects.get(user=request.user)
+                
+            elif request.user.role == "staff":
+                currentUser = Staff.objects.get(user=request.user)
+                
 
-            customer = Customer.objects.get(user=request.user)
+            elif request.user.role == "veterinarian":
+                currentUser = Veterinarian.objects.get(user=request.user)
+            
+            
 
-            if customer.images:
-                old_image_path = customer.images.path
+            if currentUser.images:
+                old_image_path = currentUser.images.path
                 if os.path.exists(old_image_path):
                     os.remove(old_image_path)
 
-            new_filename = f"{customer.id}_{slugify(image.name)}"
+            new_filename = f"{request.user.name}_{currentUser.id}_{slugify(image.name)}"
 
-            customer.images.save(new_filename, image, save=True)
+            currentUser.images.save(new_filename, image, save=True)
 
             return JsonResponse({'success': True,
                 "message": "Tải ảnh lên thành công!",
-                "image_url": customer.images.url,
+                "image_url": currentUser.images.url,
             })
         except Exception as e:
             return JsonResponse({"error": f"Lỗi: {str(e)}"}, status=500)
@@ -228,8 +240,8 @@ def booking(request, pet_id, date):
             booking.store_pet=True
         if formBooking.vaccination :
             VaccinationHistory.objects.create(pet=pet)
-        
         booking.save()
+        BookingStatus.objects.create(booking=booking)
         
         messages.success(request, "Bạn đã đặt lịch cho thú cưng thành công! Sẽ có nhân viên liên hệ để bạn thanh toán trực tuyến hoặc bạn có thể thanh toán trực tiếp tại hệ thống của chúng tôi. Xin cảm ơn quý khách!")
         return redirect("home_customer") 
@@ -428,4 +440,101 @@ def update_status_pet(request,hos_id):
 #for staff
 
 def home_staff(request):
-    return render(request,"staff/home_staff.html")
+    reviews= Review.objects.all()
+    return render(request,"staff/home_staff.html",{'reviews':reviews})
+
+def profile_staff(request):
+    staff=Staff.objects.get(user=request.user)
+    if request.method == "POST":
+        form = StaffForm(request.POST)
+        if form.is_valid():
+            staff.real_name_Staff = form.cleaned_data.get('real_name_Staff')
+            staff.email_staff = form.cleaned_data.get('email_staff')
+            staff.phone_number_staff = form.cleaned_data.get('phone_number_staff')
+            staff.save()
+    else:
+        form=StaffForm(instance=staff)
+            
+    return render(request,"staff/profile_staff.html",{'staff': staff,'form':form})
+
+
+def in_use_cage(request):
+    cages = Cage.objects.annotate(hos_count=Count('hospitalization')).filter(hos_count__gt=0)
+    if(request.method=="POST"):
+        form=Cageform(request.POST)
+        if(form.is_valid()):
+            newCage=Cage.objects.create()
+            newCage.capacity=form.cleaned_data.get('capacity')
+            newCage.save()
+            messages.success(request,'Đã thêm chuồng thành công.')
+    else :
+        form=Cageform()
+    return render(request,"staff/in_use_cage.html",{'cages':cages,'form':form})
+
+def vacant_cage(request):
+    cages = Cage.objects.annotate(hos_count=Count('hospitalization')).filter(hos_count=0)
+    return render(request,"staff/vacant_cage.html",{'cages':cages})
+
+def delete_cage(request):
+    cages = Cage.objects.annotate(hos_count=Count('hospitalization')).filter(hos_count=0)
+
+    if request.method == "POST":
+        cage_id = request.POST.get('cage_id')
+        cage = Cage.objects.get(id=cage_id)
+        cage.delete()
+        return redirect('delete_cage') 
+
+    return render(request, "staff/delete_cage.html", {'cages': cages})
+
+def petInf_store(request,cage_id):
+    cage = get_object_or_404(Cage.objects.annotate(hos_count=Count('hospitalization')), id=cage_id)
+    hoss = Hospitalization.objects.filter(cage=cage)
+    return render(request,"staff/petInf_store.html",{'cage':cage,'hoss':hoss})
+
+def deletePet_store(request,cage_id):
+    cage = get_object_or_404(Cage.objects.annotate(hos_count=Count('hospitalization')), id=cage_id)
+    hoss = Hospitalization.objects.filter(cage=cage)
+    if request.method=="POST":
+        hos_id =request.POST.get('hos_id')
+        hos=Hospitalization.objects.get(id=hos_id)
+        hos.cage=None
+        hos.save()        
+        
+    return render(request,"staff/deletePet_store.html",{'cage':cage,'hoss':hoss})
+
+def addPet_store(request,cage_id):
+    hoss= Hospitalization.objects.filter(pet__booking__store_pet=True,cage=None).distinct()
+    cage = get_object_or_404(Cage.objects.annotate(hos_count=Count('hospitalization')), id=cage_id)
+    if request.method =="POST":
+        if cage.hos_count<5 :
+            hos_id = request.POST.get('hos_id')
+            hos=Hospitalization.objects.get(id=hos_id)
+            hos.cage=cage
+            hos.save()
+        else :
+            messages.warning("Số lượng thú cưng đã đạt tối ta.")
+            return redirect('addPet_store') 
+    return render(request,"staff/addPet_store.html",{'hoss':hoss})
+
+
+def awaiting_booking(request):
+    bookings=Booking.objects.filter(bookingstatus__awaiting=True)
+    return render(request,'staff/awaiting_booking.html',{'bookings':bookings})
+
+def confirm_booking(request):
+    bookings=Booking.objects.filter(bookingstatus__confirm=True)
+    return render(request,'staff/confirm_booking.html')
+
+def success_booking(request):
+    bookings=Booking.objects.filter(bookingstatus__success=True)
+    return render(request,'staff/success_booking.html')
+
+def cancel_booking(request):
+    bookings=Booking.objects.filter(bookingstatus__cancelled=True)
+    return render(request,'staff/cancel_booking.html')
+
+def bookingInf_staff(request,booking_id):
+    booking=Booking.objects.get(id=booking_id)
+    return render(request,'staff/bookingInf_staff.html')
+
+
