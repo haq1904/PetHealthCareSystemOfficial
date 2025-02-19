@@ -46,6 +46,7 @@ urlpatterns = [
     path('home_staff/success_booking/',views.success_booking,name='success_booking'),
     path('home_staff/cancel_booking/',views.cancel_booking,name='cancel_booking'),
     path('home_staff/bookingInf_staff/<int:booking_id>/',views.bookingInf_staff,name='bookingInf_staff'),
+    path('home_staff/bookingInf_staff/<int:booking_id>/booking_date_staff/',views.booking_date_staff,name='booking_date_staff'),
 
 
 

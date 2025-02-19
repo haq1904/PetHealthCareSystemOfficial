@@ -3,6 +3,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 from django.db.models import Count
+from decimal import Decimal
 
 class UserRole(models.TextChoices):
     USER = 'user', 'User'
@@ -287,7 +288,9 @@ class Cost(models.Model):
 
     @property
     def total_fee(self):
-        return self.service_fee + self.extra_fee
+        refund_fee = self.booking.refund_fee if self.booking.refund_fee is not None else Decimal('0.00')
+        return self.service_fee + self.extra_fee - refund_fee
+
     
     def __str__(self):
         return f"Cost for Booking {self.booking.id}"

@@ -38,8 +38,8 @@ class BookingForm(forms.ModelForm):
         model = Booking
         fields = ['pet', 'cancel_date', 'refund_fee', 'store_pet']
         widgets = {
-            'cancel_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'refund_fee': forms.NumberInput(attrs={'step': '0.01'}) 
+            'cancel_date': forms.DateTimeInput(attrs={'type': 'datetime-local','placeholder': 'Ngày hủy '}),
+            'refund_fee': forms.NumberInput(attrs={'step': '0.01','placeholder': 'Phí phát sinh','style': 'width: 100px; height: 40px;'}) 
         }
 
 class AppointmentDateForm(forms.ModelForm):
@@ -108,4 +108,19 @@ class Cageform(forms.ModelForm):
         fields = ['capacity']
         widgets={
             'capacity': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 5,'placeholder': 'Slot '}),
+        }
+
+
+class CostForm(forms.ModelForm):
+    class Meta:
+        model = Cost
+        fields = ['service_fee', 'extra_fee', 'extra_service']
+        labels = {
+            'extra_fee': 'Phí dịch vụ phát sinh',
+            'extra_service': 'Mô tả dịch vụ phát sinh',
+        }
+        widgets = {
+            'service_fee': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Nhập phí dịch vụ'}),
+            'extra_fee': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Nhập phí dịch vụ phát sinh', 'style': 'width:100px; height: 20px'}),
+            'extra_service': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Mô tả dịch vụ phát sinh','style': 'width:100px; height: 20px'}),
         }

@@ -210,8 +210,22 @@ def booking(request, pet_id, date):
     
     if request.method == "POST":
         formBookingForm = FormBookingForm(request.POST)
-        booking=Booking.objects.create(pet=pet,veterinarian=vet)
         formBooking = formBookingForm.save(commit=False)  
+        flag=True
+        #kiểm tra có hồ sơ nào cùng dịch vụ trong trạng thái đợi không.
+        if formBooking.examine : 
+            if Booking.objects.filter(formbooking__examine=True,bookingstatus__awaiting=True,pet=pet) :
+                flag=False
+        if formBooking.hospitalization : 
+            if Booking.objects.filter(formbooking__hospitalization=True,bookingstatus__awaiting=True,pet=pet) :
+                flag=False
+        if formBooking.vaccination :
+            if Booking.objects.filter(formbooking__vaccination=True,bookingstatus__awaiting=True,pet=pet) :
+                flag=False
+        if not flag :
+            messages.warning(request,f"Hồ sơ của pet {pet.name_pet} đã tồn tại những dịch vụ bạn đã chọn. Vui lòng chọn dịch khác!")
+            return redirect('home_customer')
+        booking=Booking.objects.create(pet=pet,veterinarian=vet)
         formBooking.booking=booking
         formBooking.save()
         
@@ -523,18 +537,143 @@ def awaiting_booking(request):
 
 def confirm_booking(request):
     bookings=Booking.objects.filter(bookingstatus__confirm=True)
-    return render(request,'staff/confirm_booking.html')
+    return render(request,'staff/confirm_booking.html',{'bookings':bookings})
 
 def success_booking(request):
     bookings=Booking.objects.filter(bookingstatus__success=True)
-    return render(request,'staff/success_booking.html')
+    return render(request,'staff/success_booking.html',{'bookings':bookings})
 
 def cancel_booking(request):
     bookings=Booking.objects.filter(bookingstatus__cancelled=True)
-    return render(request,'staff/cancel_booking.html')
+    return render(request,'staff/cancel_booking.html',{'bookings':bookings})
 
 def bookingInf_staff(request,booking_id):
     booking=Booking.objects.get(id=booking_id)
-    return render(request,'staff/bookingInf_staff.html')
+    appointmentdate=AppointmentDate.objects.get(booking=booking)
+    if appointmentdate.morning==True:
+        part = "Buổi sáng"
+    elif appointmentdate.afternoon==True:
+        part = "Buổi chiều"
+    else :
+        part = "Buổi tối"
+
+    options=[]
+    if booking.formbooking.examine:
+        options.append("Khám bệnh")
+    if booking.formbooking.hospitalization:
+        options.append("Gửi để theo dõi")
+    if booking.formbooking.vaccination:
+        options.append("Tiêm vaccine")
+
+    if booking.bookingstatus.awaiting:
+        status="Đang đợi xác nhận"
+    elif booking.bookingstatus.confirm:
+        status="Đã được xác nhận"
+    elif booking.bookingstatus.success:
+        status="Thành công"
+    elif booking.bookingstatus.cancelled:
+        status="Đã hủy"
+
+    if request.method=="POST":
+        action = request.POST.get('action')
+        form=CostForm(request.POST)
+        if action=='changeBtn':
+            booking.staff=Staff.objects.get(user=request.user)
+            if form.is_valid() :
+                #lưu phí phát sinh và nội dung phát sinh
+                booking.cost.extra_fee=form.cleaned_data.get('extra_fee')
+                booking.cost.extra_service=form.cleaned_data.get('extra_service')
+                booking.cost.save()
+
+                #đặt lại trạng thái cho lịch đặt
+                booking.bookingstatus.awaiting=False
+                booking.bookingstatus.confirm=True
+                booking.bookingstatus.save()
+
+                #lưu id của staff vào booking
+                booking.save()
+        elif action=='deleteBtn' :
+            #set lại thời gian rảnh của các bác sĩ
+            schedule=Schedule.objects.get(date=booking.appointmentdate.date,veterinarian=booking.veterinarian)
+            if booking.appointmentdate.morning:
+                schedule.morning=True
+            elif booking.appointmentdate.afternoon:
+                schedule.afternoon=True
+            elif booking.appointmentdate.night:
+                schedule.night=True
+            schedule.save()
+            booking.delete()
+            return redirect('awaiting_booking')
+    else :
+        form=CostForm()
+    return render(request,'staff/bookingInf_staff.html',{'booking':booking,'part': part,'options':options,'status':status,'form':form})
+
+
+
+def booking_date_staff(request,booking_id):
+    booking = Booking.objects.get(id = booking_id)
+    date = request.session.get("selected_date")
+
+    if request.method == "POST":
+        action=request.POST.get('action')
+        dateForm = AppointmentDateForm(request.POST)
+        if action=='confirmBtn':
+            
+            if dateForm.is_valid():
+                date = dateForm.cleaned_data['date']
+                request.session["selected_date"] = str(date)
+        elif action == 'bookBtn' :
+            choice = request.POST.get("appointment_choice")
+            if choice : 
+                schedule_str , part = choice.split(":")
+                schedule_id = int(schedule_str)
+                schedule = Schedule.objects.get(id=schedule_id) # lấy lịch được chọn
+                appointmentdate=AppointmentDate.objects.get(booking=booking) # lấy ngày và buổi của booking hiện tại
+                appointmentdate.date=date
+                if not booking.veterinarian : # nếu chưa có bác sĩ
+                    booking.veterinarian=schedule.veterinarian # gán bác sĩ của ngày được chọn cho booking
+                    #thay đổi ngày đặt lịch và cũng như là trạng thái lịch cua bác sĩ
+                    if part == 'morning' : 
+                        schedule.morning=False
+                        appointmentdate.morning=True
+                    elif part == 'afternoon':
+                        schedule.afternoon=False
+                        appointmentdate.afternoon=True
+                    elif part == 'night':
+                        schedule.night=False
+                        appointmentdate.night=True
+                    booking.staff=Staff.objects.get(user=request.user)
+                    booking.bookingstatus.awaiting=False
+                    booking.bookingstatus.confirm=True
+                    booking.bookingstatus.save()
+                    schedule.save()
+                    appointmentdate.save()
+                    booking.save()
+                    messages.success(request,'Đặt lịch với bác sĩ thành công!')
+                    return redirect('bookingInf_staff',booking_id=booking_id)
+                else : 
+                    messages.warning(request,'Lịch khám đã có bác sĩ phụ trách, vui lòng không đổi!')
+                    return redirect('bookingInf_staff',booking_id=booking_id)
+                
+     
+            else :
+                messages.warning(request,'Vui lòng chọn ít nhất một ngày!')
+                return redirect("booking_date_staff",booking_id=booking_id)
+
+
+    elif request.method == "GET" and "selected_date" in request.session:
+        dateForm = AppointmentDateForm(initial={'date': date})
+
+    else:
+        dateForm = AppointmentDateForm()
+
+    schedules = Schedule.objects.filter(date=date) if date else []
+
+    context = {
+        'dateForm': dateForm,
+        'schedules': schedules,
+        'date': date,
+    }
+    return render(request,'staff/booking_date_staff.html',context)
 
 

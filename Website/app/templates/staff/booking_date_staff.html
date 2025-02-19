@@ -1,0 +1,67 @@
+{% extends 'customer/booking_date.html' %}
+{% load static %}
+
+{% block homeButton %}
+  <a href="{% url 'home_staff' %}"><img style="width: 60px; height:auto;" src="{% static 'images/home.png' %}" alt="home button" /></a>
+{% endblock %}
+{% block skip %}
+
+{% endblock %}
+
+{% block show_schedule %}
+  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-success" id="modalLabel">Thông báo</h5>
+        </div>
+        <div class="modal-body">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <form method="post">
+    {% csrf_token %}
+    {% for schedule in schedules %}
+      <div class="item-content-layout-booking-date" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+        <p style="margin-bottom: 10px;">{{ schedule.veterinarian.real_name_veterinarian }}</p>
+
+        {% if schedule.morning %}
+          <input type="radio" name="appointment_choice" id="appointment_{{ schedule.id }}_morning" value="{{ schedule.id }}:morning" />
+        {% else %}
+          <img style="height: 20px; width: auto;" src="{% static 'images/busy.png' %}" alt="busy" />
+        {% endif %}
+
+        {% if schedule.afternoon %}
+          <input type="radio" name="appointment_choice" id="appointment_{{ schedule.id }}_afternoon" value="{{ schedule.id }}:afternoon" />
+        {% else %}
+          <img style="height: 20px; width: auto;" src="{% static 'images/busy.png' %}" alt="busy" />
+        {% endif %}
+
+        {% if schedule.night %}
+          <input type="radio" name="appointment_choice" id="appointment_{{ schedule.id }}_night" value="{{ schedule.id }}:night" />
+        {% else %}
+          <img style="height: 20px; width: auto;" src="{% static 'images/busy.png' %}" alt="busy" />
+        {% endif %}
+      </div>
+    {% endfor %}
+    <button onclick="return confirmBooking()" type="submit" name="action" value="bookBtn">Đặt lịch</button>
+  </form>
+  <script>
+    function confirmBooking() {
+      return alert('Xác nhận thay đổi thông tin với ngày đã chọn!')
+    }
+  </script>
+  {% if messages %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var modal = new bootstrap.Modal(document.getElementById('successModal'))
+        modal.show()
+        setTimeout(() => modal.hide(), 2000)
+      })
+    </script>
+  {% endif %}
+{% endblock %}

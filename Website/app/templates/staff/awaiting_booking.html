@@ -133,7 +133,7 @@
       <div class="content_body">
         {% if bookings %}
           {% for booking in bookings %}
-            <a href="" class="item_content_body">
+            <a href="{% url 'bookingInf_staff' booking.id %}" class="item_content_body">
               <span>Id lịch : {{ booking.id }}</span>
               <img class="image_pet" src="{{ booking.pet.images.url }}" alt="pet" />
               <span>Pet : {{ booking.pet.name_pet }} <br /> ID : {{ booking.pet.id }}</span>
