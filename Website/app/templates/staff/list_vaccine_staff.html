@@ -1,0 +1,61 @@
+{% extends 'staff/list_hos_staff.html' %}
+{% load static %}
+
+{% block title %}
+  <div class="title-appointment-registration">
+    <button class="addBtn-title-appointment-registration" id="editBtn-updateInf"></button>
+    <div class="title-title-appointment-registration">
+      <p class="layout-right" style="font-size: 22px; width: fit-content; margin-bottom: 0px; margin-left: 50pxh;">Hồ sơ vaccine</p>
+    </div>
+  </div>
+{% endblock %}
+
+{% block title_content %}
+  <div class="title-content-appointment-registration">
+    <p style="align-self: center; justify-self: center;">Ngày</p>
+    <p style="align-self: center; justify-self: center;">Loại vaccine</p>
+    <p style="align-self: center; justify-self: center;">liều lượng</p>
+    <p style="align-self: center; justify-self: center;">Chú ý</p>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="content-content-appointment-registration">
+    {% if vaccines %}
+      {% for vaccine in vaccines %}
+        <div class="item-content-content-appointment-registration">
+          <p>
+            {% if vaccine.date %}
+              {{ vaccine.date|date:'d-m-Y' }}
+            {% else %}
+              Chưa cập nhật
+            {% endif %}
+          </p>
+          <p>
+            {% if vaccine.vaccine_type %}
+              {{ vaccine.vaccine_type }}
+            {% else %}
+              Chưa cập nhật
+            {% endif %}
+          </p>
+          <p>
+            {% if vaccine.dosage %}
+              {{ vaccine.dosage }}
+            {% else %}
+              Chưa cập nhật
+            {% endif %}
+          </p>
+          <p>
+            {% if vaccine.note %}
+              {{ vaccine.note }}
+            {% else %}
+              Chưa cập nhật
+            {% endif %}
+          </p>
+        </div>
+      {% endfor %}
+    {% else %}
+      <h4 style="text-align: center;">Chưa có thông tin</h4>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'staff/bookingInf_staff.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <style>
+    .container {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-rows: 1fr 8fr;
+    }
+    
+    .title {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-content: center;
+    }
+    
+    .text {
+      -moz-border-radius: 78px 78px 78px 78px;
+      -webkit-border-radius: 78px 78px 78px 78px;
+      border-radius: 78px 78px 78px 78px;
+      border: 8px inset #cccccc;
+      background-color: #75eff5;
+    }
+    
+    .body {
+      width: 70%;
+      height: 520px;
+      -moz-border-radius: 78px 78px 78px 78px;
+      -webkit-border-radius: 78px 78px 78px 78px;
+      border-radius: 78px 78px 78px 78px;
+      border: 8px inset #cccccc;
+      background-color: #75eff5;
+      display: grid;
+      grid-template-rows: repeat(7, 1fr);
+      grid-template-columns: repeat(2, 1fr);
+      place-self: center;
+      place-items: center;
+    }
+    
+    .images {
+      width: 100px;
+      height: 100px;
+      -moz-border-radius: 78px 78px 78px 78px;
+      -webkit-border-radius: 78px 78px 78px 78px;
+      border-radius: 78px 78px 78px 78px;
+      border: 3px inset #cccccc;
+    }
+    
+    .addBtn {
+      text-decoration: none;
+      color: black;
+      border-radius: 135px 135px 135px 135px;
+      -webkit-border-radius: 135px 135px 135px 135px;
+      -moz-border-radius: 135px 135px 135px 135px;
+      background: rgb(0, 208, 153);
+      border: 3px inset #000000;
+      font-size: 24px;
+      width: fit-content;
+      height: fit-content;
+    }
+    
+    .deleteBtn {
+      margin-top: 10px;
+      text-decoration: none;
+      color: black;
+      border-radius: 135px 135px 135px 135px;
+      -webkit-border-radius: 135px 135px 135px 135px;
+      -moz-border-radius: 135px 135px 135px 135px;
+      background: rgb(137, 3, 3);
+      border: 3px inset #000000;
+      font-size: 24px;
+      width: fit-content;
+      height: fit-content;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="title">
+      <span class="text" style="font-size: 20px;">Thông tin chi tiết của thú cưng</span>
+    </div>
+    <div class="body">
+      <img class="images" src="{{ pet.images.url }}" alt="" />
+      <span>Pet : {{ pet.name_pet }} -- Id : {{ pet.id }}</span>
+      <span>Khách : {{ pet.customer.name_customer }} -- Id : {{ pet.customer.id }}</span>
+      <span>Chủng loại : {{ pet.species }}</span>
+      <span>Tuổi : {{ pet.age }}</span>
+      <span>Cân nặng : {{ pet.weight }}</span>
+      <span>Tình trạng : {{ pet.pet_status }}</span>
+      <span>Loại : {{ pet.pet_type }}</span>
+      <span>
+        Giới tính :{% if pet.is_male %}
+          Đực
+        {% else %}
+          Cái
+        {% endif %}
+      </span>
+      <a class="addBtn" href="list_medical_staff">Lịch sử bệnh lý</a>
+      <a class="addBtn" href="list_vaccine_staff">Lịch sử vaccine</a>
+      <a class="addBtn" href="list_examine_staff">Hồ sơ khám bệnh</a>
+      <a class="addBtn" href="list_hos_staff">Hồ sơ lưu chuồng</a>
+      <form method="POST">
+        {% csrf_token %}
+        <button onclick="return confirmDelete()" class="deleteBtn">Xóa thú cưng</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    function confirmDelete() {
+      return confirm('Xác nhận xóa thú cưng này!')
+    }
+  </script>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'staff/show_all_pet.html' %}
+{% load static %}
+
+{% block title_body %}
+  <div class="title-body">
+    <a class="item_title_body" style="border-right:  8px inset #cccccc;" href="{% url 'show_all_pet' %}"><p style="font-size: 20px;">Tất cả</p></a>
+    <a class="item_title_body" style="border-left:  8px inset #cccccc;" href="{% url 'show_all_storepet' %}"><p class="text_title">Lưu chuồng</p></a>
+  </div>
+{% endblock %}
